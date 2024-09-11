@@ -1,9 +1,20 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import './index.css'
+import MainPage from './pages/MainPage';
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <div className='h-screen w-screen flex justify-center align-center text-3xl'>Hello World</div>
-  </StrictMode>,
-)
+function Main() {
+  return(
+    <StrictMode>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<MainPage/>} />
+        </Routes>
+      </BrowserRouter>    
+    </StrictMode>
+  )
+}
+
+const root = createRoot(document.getElementById('root'));
+root.render(<Main />);
