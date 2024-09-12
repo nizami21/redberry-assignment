@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Header from '../components/Header';
 import { apiGet } from '../services/apiRequest';
+import AddAgentModal from '../components/AddAgentModal';
 
 const NewListingPage = () => {
-  const [formData, setFormData] = useState({
-    address: '',
-    image: null,
-    region_id: '',
-    description: '',
-    city_id: '',
-    zip_code: '',
-    price: '',
-    area: '',
-    bedrooms: '',
-    is_rental: 0,
-    agent_id: ''
+  const [formData, setFormData] = useState(() => {
+    const savedData = localStorage.getItem('newListingFormData');
+    return savedData ? JSON.parse(savedData) : {
+      address: '',
+      image: null,
+      region_id: '',
+      description: '',
+      city_id: '',
+      zip_code: '',
+      price: '',
+      area: '',
+      bedrooms: '',
+      is_rental: 0,
+      agent_id: ''
+    };
   });
 
   const [regions, setRegions] = useState([]);
@@ -22,6 +26,8 @@ const NewListingPage = () => {
   const [filteredCities, setFilteredCities] = useState([]);
   const [errors, setErrors] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
+  const agentModalRef = useRef();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,6 +53,10 @@ const NewListingPage = () => {
     }
   }, [formData.region_id, cities]);
 
+  useEffect(() => {
+    localStorage.setItem('newListingFormData', JSON.stringify(formData));
+  }, [formData]);
+
   const handleInputChange = (e) => {
     const { name, value, type } = e.target;
     let updatedValue = type === 'number' ? (value === '' ? '' : Number(value)) : value;
@@ -70,6 +80,15 @@ const NewListingPage = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (!file.type.startsWith('image/')) {
+        setErrors(prev => ({ ...prev, image: 'გთხოვთ ატვირთოთ მხოლოდ სურათი' }));
+        e.target.value = ''; // Clear the file input
+        return;
+      }
+      if(file.size > 1 * 1000 * 1024){
+        setErrors(prev => ({...prev, image: 'სურათის ზომა არ უნდა აღემატებოდეს 1MB-ს'}));
+        return;
+      }
       setFormData(prev => ({ ...prev, image: file }));
       setImagePreview(URL.createObjectURL(file));
       const error = validateField('image', file);
@@ -100,8 +119,13 @@ const NewListingPage = () => {
         if (value.trim().split(/\s+/).length < 5) error = 'მინიმუმ ხუთი სიტყვა';
         break;
       case 'image':
-        if (!value) error = 'სურათის ატვირთვა სავალდებულოა';
-        else if (value.size > 1024 * 1024) error = 'სურათი არ უნდა აღემატებოდეს 1მბ-ს';
+        if (!value) {
+          error = 'სურათის ატვირთვა სავალდებულოა';
+        } else if (value.size > 1024 * 1024) { // 1MB in bytes
+          error = 'სურათი არ უნდა აღემატებოდეს 1MB-ს';
+        } else if (!value.type.startsWith('image/')) {
+          error = 'გთხოვთ ატვირთოთ მხოლოდ სურათი';
+        }
         break;
       default:
         if (!value) error = 'ეს ველი სავალდებულოა';
@@ -354,6 +378,14 @@ const NewListingPage = () => {
                 </div>
               )}
               </div>
+               {errors.image && (
+                <div className={getMessageClassName('image')}>
+                  <svg className="w-3 h-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  {errors.image || ''}
+                </div>
+               )}
           </div>
           </div>
 
@@ -369,8 +401,10 @@ const NewListingPage = () => {
               onChange={handleInputChange}
               className="w-full p-2 border border-[#808A93] bg-none rounded-md"
             >
-              <option value="">აირჩიეთ აგენტი</option>
-              {/* Add agent options here */}
+              <option onClick={() => agentModalRef.current.toggleModal()} value="">
+                აგენტის დამატება
+              </option>
+              
             </select>
           </div>
         </form>
@@ -380,6 +414,7 @@ const NewListingPage = () => {
           <button onClick={handleSubmit} className="px-6 py-2 bg-red-500 text-white rounded-md">დაამატე ლისტინგი</button>
         </div>
       </div>
+      <AddAgentModal ref={agentModalRef} />
     </div>
   );
 };
