@@ -1,4 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState, useCallback, useEffect } from 'react';
+import { apiPost } from '../services/apiRequest';
 
 const AddAgentModal = forwardRef((props, ref) => {
   const [modalData, setModalData] = useState(() => {
@@ -50,11 +51,6 @@ const AddAgentModal = forwardRef((props, ref) => {
           error = "ტელეფონის ნომერი უნდა იყოს ფორმატში: 5XXXXXXXXX";
         }
         break;
-      case 'avatar':
-        if (!value) {
-          error = "ავატარი სავალდებულოა";
-        }
-        break;
       default:
         if (!value) error = 'ეს ველი სავალდებულოა';
     }
@@ -64,13 +60,14 @@ const AddAgentModal = forwardRef((props, ref) => {
   const validateForm = useCallback(() => {
     const newErrors = {};
     Object.keys(modalData).forEach(key => {
-      const error = validateField(key, modalData[key]);
-      if (error) newErrors[key] = error;
+      if (key !== 'avatar') {  // Avatar is optional now
+        const error = validateField(key, modalData[key]);
+        if (error) newErrors[key] = error;
+      }
     });
-    if (!avatarFile) newErrors.avatar = "ავატარი სავალდებულოა";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [modalData, avatarFile, validateField]);
+  }, [modalData, validateField]);
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -123,17 +120,46 @@ const AddAgentModal = forwardRef((props, ref) => {
     setErrors(prev => ({ ...prev, avatar: 'ავატარი სავალდებულოა' }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       const formData = new FormData();
-      Object.keys(modalData).forEach(key => formData.append(key, modalData[key]));
-      if (avatarFile) formData.append('avatar', avatarFile);
-      props.onSubmit(formData);
-      toggleModal();
-      // Clear localStorage after successful submission
-      localStorage.removeItem('addAgentModalData');
-      localStorage.removeItem('addAgentAvatarPreview');
+      formData.append('name', modalData.name);
+      formData.append('surname', modalData.surname);
+      formData.append('email', modalData.email);
+      formData.append('phone', modalData.phone);
+      if (avatarFile) {
+        formData.append('avatar', avatarFile);
+      }
+
+      try {
+        const response = await apiPost('/agents', formData);
+        
+        if (response.status === 201) {
+          console.log('Agent added successfully:', response.data);
+          
+          if (props.onAgentAdded) {
+            props.onAgentAdded(response.data);
+          }
+          
+          toggleModal();
+          
+          localStorage.removeItem('addAgentModalData');
+          localStorage.removeItem('addAgentAvatarPreview');
+          
+          // Reset form data
+          setModalData({
+            name: '',
+            surname: '',
+            email: '',
+            phone: ''
+          });
+          setAvatarFile(null);
+          setAvatarPreview(null);
+        }
+      } catch (error) {
+        console.error('Error adding agent:', error);
+      }
     }
   };
 
@@ -144,6 +170,7 @@ const AddAgentModal = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     toggleModal
   }));
+
 
   if (!isModalOpen) return null;
 
@@ -273,7 +300,7 @@ const AddAgentModal = forwardRef((props, ref) => {
             გაუქმება
           </button>
           <button type="submit" onClick={handleSubmit} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-            დამატება აგენტი
+            აგენტის დამატება
           </button>
         </div>
       </div>

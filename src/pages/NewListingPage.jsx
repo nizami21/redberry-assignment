@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Header from '../components/Header';
-import { apiGet } from '../services/apiRequest';
+import { apiGet, apiPost } from '../services/apiRequest';
 import AddAgentModal from '../components/AddAgentModal';
 
 const NewListingPage = () => {
@@ -23,19 +23,26 @@ const NewListingPage = () => {
 
   const [regions, setRegions] = useState([]);
   const [cities, setCities] = useState([]);
+  const [agents, setAgents] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
   const [errors, setErrors] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
   const agentModalRef = useRef();
 
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const regionsData = await apiGet('/regions');
-        setRegions(regionsData);
-        
-        const citiesData = await apiGet('/cities');
-        setCities(citiesData);
+        const [regionsResponse, citiesResponse, agentsResponse] = await Promise.all([
+          apiGet('/regions'),
+          apiGet('/cities'),
+          apiGet('/agents')
+        ]);
+
+        setRegions(regionsResponse.data);
+        setCities(citiesResponse.data);
+        setAgents(agentsResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -43,6 +50,11 @@ const NewListingPage = () => {
 
     fetchData();
   }, []);
+
+  const handleAgentAdded = (newAgent) => {
+    setAgents(prevAgents => [...prevAgents, newAgent]);
+    setFormData(prev => ({ ...prev, agent_id: newAgent.id }));
+  };
 
   useEffect(() => {
     if (formData.region_id) {
@@ -58,9 +70,12 @@ const NewListingPage = () => {
   }, [formData]);
 
   const handleInputChange = (e) => {
+    console.log(formData.is_rental);
     const { name, value, type } = e.target;
     let updatedValue = type === 'number' ? (value === '' ? '' : Number(value)) : value;
-    
+    if(value == 'add-agent'){
+      agentModalRef.current.toggleModal();
+    }
     if (['price', 'area', 'bedrooms', 'zip_code'].includes(name)) {
       updatedValue = value.replace(/[^\d.]/g, '');
       if (name === 'bedrooms') updatedValue = value.replace(/\D/g, '');
@@ -99,7 +114,6 @@ const NewListingPage = () => {
   const removeImage = () => {
     setFormData(prev => ({ ...prev, image: null }));
     setImagePreview(null);
-    setErrors(prev => ({ ...prev, image: 'სურათის ატვირთვა სავალდებულოა' }));
   };
 
   const validateField = (name, value) => {
@@ -119,13 +133,13 @@ const NewListingPage = () => {
         if (value.trim().split(/\s+/).length < 5) error = 'მინიმუმ ხუთი სიტყვა';
         break;
       case 'image':
-        if (!value) {
-          error = 'სურათის ატვირთვა სავალდებულოა';
-        } else if (value.size > 1024 * 1024) { // 1MB in bytes
+        if (value.size > 1024 * 1024) { // 1MB in bytes
           error = 'სურათი არ უნდა აღემატებოდეს 1MB-ს';
         } else if (!value.type.startsWith('image/')) {
           error = 'გთხოვთ ატვირთოთ მხოლოდ სურათი';
         }
+        break;
+      case 'is_rental':
         break;
       default:
         if (!value) error = 'ეს ველი სავალდებულოა';
@@ -142,7 +156,7 @@ const NewListingPage = () => {
     if (!formData[fieldName]) return "flex mt-[4px] text-xs text-[#021526]";
     return errors[fieldName] ? "flex mt-[4px] text-xs text-[#F93B1D]" : "flex mt-[4px] text-xs text-[#45A849]";
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formErrors = {};
     Object.keys(formData).forEach(key => {
@@ -150,11 +164,46 @@ const NewListingPage = () => {
       if (error) formErrors[key] = error;
     });
     setErrors(formErrors);
+  
     if (Object.keys(formErrors).length === 0) {
-      console.log('Form submitted:', formData);
+      try {
+        const postData = new FormData();
+        Object.keys(formData).forEach(key => {
+          if (formData[key] !== null && formData[key] !== undefined) {
+            postData.append(key, formData[key]);
+          }
+        });
+        const response = await apiPost('/real-estates', postData);
+  
+        if (response.status === 201) {
+          console.log('Real Estate added successfully:', response.data);          
+          localStorage.removeItem('newListingFormData');
+          setFormData({
+            address: '',
+            image: null,
+            region_id: '',
+            description: '',
+            city_id: '',
+            zip_code: '',
+            price: '',
+            area: '',
+            bedrooms: '',
+            is_rental: 0,
+            agent_id: ''
+          });
+          setImagePreview(null);
+        } else {
+          console.error('Error in response:', response);
+        }
+      } catch (error) {
+        console.error('Error adding real estate:', error);
+      }
+    } else {
+      console.log("Form contains errors:", formErrors);
     }
   };
-
+  
+  
   return (
     <div className="min-h-screen">
       <Header />
@@ -242,7 +291,7 @@ const NewListingPage = () => {
                 className="w-full p-2 border border-[#808A93] rounded-md"
               >
                 <option value="">აირჩიეთ</option>
-                {regions.map(region => (
+                {regions && regions.length > 0 && regions.map(region => (
                   <option key={region.id} value={region.id}>{region.name}</option>
                 ))}
               </select>
@@ -399,12 +448,16 @@ const NewListingPage = () => {
               name="agent_id"
               value={formData.agent_id}
               onChange={handleInputChange}
+              placeholder={'აირჩიე აგენტი'}
               className="w-full p-2 border border-[#808A93] bg-none rounded-md"
             >
-              <option onClick={() => agentModalRef.current.toggleModal()} value="">
+              <option value="">აირჩიე აგენტი</option>
+              <option value="add-agent">
                 აგენტის დამატება
               </option>
-              
+              {agents && agents.map(agent => (
+                <option key={agent.id} value={agent.id}>{agent.name}</option>
+              ))}
             </select>
           </div>
         </form>
@@ -414,7 +467,7 @@ const NewListingPage = () => {
           <button onClick={handleSubmit} className="px-6 py-2 bg-red-500 text-white rounded-md">დაამატე ლისტინგი</button>
         </div>
       </div>
-      <AddAgentModal ref={agentModalRef} />
+      <AddAgentModal ref={agentModalRef} onAgentAdded={handleAgentAdded}/>
     </div>
   );
 };
