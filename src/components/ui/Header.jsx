@@ -1,5 +1,5 @@
 import React from 'react';
-import redberryLogo from '../assets/img/redberryLogo.svg'
+import redberryLogo from "/src/assets/img/redberryLogo.svg";
 
 const Header = () => {
   return (

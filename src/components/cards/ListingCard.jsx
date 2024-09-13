@@ -1,8 +1,8 @@
 import React from 'react';
-import addressLogo from '../assets/icons/address-post.svg';
-import areaLogo from '../assets/icons/area-logo.svg';
-import bedLogo from '../assets/icons/bed.svg';
-import locationLogo from '../assets/icons/location-marker.svg';
+import addressLogo from '/src/assets/icons/address-post.svg';
+import areaLogo from '/src/assets/icons/area-logo.svg';
+import bedLogo from '/src/assets/icons/bed.svg';
+import locationLogo from '/src/assets/icons/location-marker.svg';
 
 const RealEstateCard = ({ price,city, location, bedrooms, area, zipcode, imageUrl, isRental }) => {
   const statusText = isRental ? "ქირავდება" : "იყიდება";

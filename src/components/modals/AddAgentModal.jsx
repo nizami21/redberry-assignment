@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState, useCallback, useEffect } from 'react';
-import { apiPost } from '../services/apiRequest';
+import { apiPost } from '/src/services/apiRequest';
 
 const AddAgentModal = forwardRef((props, ref) => {
   const [modalData, setModalData] = useState(() => {

@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Header from '../components/Header';
+import Header from '/src/components/ui/Header';
 import { apiGet, apiPost } from '../services/apiRequest';
-import AddAgentModal from '../components/AddAgentModal';
+import AddAgentModal from '/src/components/modals/AddAgentModal';
+import { useNavigate } from 'react-router-dom';
 
-const NewListingPage = () => {
+const NewListingPage = ({props}) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState(() => {
     const savedData = localStorage.getItem('newListingFormData');
     return savedData ? JSON.parse(savedData) : {
@@ -463,7 +465,7 @@ const NewListingPage = () => {
         </form>
         
         <div className="flex justify-end space-x-4">
-          <button type="button" className="px-6 py-2 border border-gray-300 rounded-md text-gray-700">გაუქმება</button>
+          <button type="button" onClick={() => navigate(-1)} className="px-6 py-2 border border-gray-300 rounded-md text-gray-700">გაუქმება</button>
           <button onClick={handleSubmit} className="px-6 py-2 bg-red-500 text-white rounded-md">დაამატე ლისტინგი</button>
         </div>
       </div>
