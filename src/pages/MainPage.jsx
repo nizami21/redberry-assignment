@@ -3,7 +3,7 @@ import { apiGet } from '../services/apiRequest';
 import Header from '../components/ui/Header';
 import FilterBar from '../components/ui/FilterBar';
 import AddAgentModal from '../components/modals/AddAgentModal';
-import SkeletonCard from '../components/cards/loading/ListingCardSkeleton';
+import SkeletonCard from '../components/cards/lazy/ListingCardSkeleton';
 
 const LazyRealEstateCard = lazy(() => import('/src/components/cards/ListingCard'));
 

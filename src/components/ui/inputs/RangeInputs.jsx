@@ -1,0 +1,78 @@
+import React, { useState, useEffect } from 'react';
+
+const RangeInputs = ({ type, minValue, maxValue, onMinChange, onMaxChange }) => {
+    const [minInputValue, setMinInputValue] = useState(minValue);
+    const [maxInputValue, setMaxInputValue] = useState(maxValue);
+    const [error, setError] = useState(false);
+
+    useEffect(() => {
+        setMinInputValue(minValue);
+        setMaxInputValue(maxValue);
+        checkValidity(minValue, maxValue);
+    }, [minValue, maxValue]);
+    const checkValidity = (min, max) => {
+        if (parseFloat(min) > parseFloat(max)) {
+            setError(true);
+        } else {
+            setError(false);
+        }
+    }
+    const handleMinChange = (e) => {
+        const value = e.target.value;
+        setMinInputValue(value);
+        onMinChange(value);
+    };
+
+    const handleMaxChange = (e) => {
+        const value = e.target.value;
+        setMaxInputValue(value);
+        onMaxChange(value);
+    };
+
+    const icon = type === 'price' ? '₾' : 'მ²';
+
+    const inputStyle = "w-full h-[48px] px-3 pr-8 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-blue-500";
+
+    return (
+        <div>
+            <div className="flex space-x-4">
+                <div className="relative w-1/2">
+                    <input
+                        type="text"
+                        inputMode="numeric"
+                        placeholder="დან"
+                        value={minInputValue}
+                        onChange={() => {
+                            handleMinChange();
+                            checkValidity(minInputValue, maxInputValue);
+                        }}
+                        className={inputStyle}
+                    />
+                    <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                        {icon}
+                    </span>
+                </div>
+                <div className="relative w-1/2">
+                    <input
+                        type="text"
+                        inputMode="numeric"
+                        placeholder="მდე"
+                        value={maxInputValue}
+                        onChange={() => {
+                            handleMaxChange();
+                            checkValidity(minInputValue, maxInputValue);
+                        }}
+                        className={inputStyle}
+                    />
+                    <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                        {icon}
+                    </span>
+                </div>
+            </div>
+            {error && <span className="text-red-500 text-sm mt-[8px]">ჩაწერეთ ვალიდური მონაცემები.</span>}
+
+        </div>
+    );
+};
+
+export default RangeInputs;
