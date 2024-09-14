@@ -10,23 +10,36 @@ const RangeInputs = ({ type, minValue, maxValue, onMinChange, onMaxChange }) => 
         setMaxInputValue(maxValue);
         checkValidity(minValue, maxValue);
     }, [minValue, maxValue]);
+
     const checkValidity = (min, max) => {
-        if (parseFloat(min) > parseFloat(max)) {
+        if (min && max && parseFloat(min) > parseFloat(max)) {
             setError(true);
         } else {
             setError(false);
         }
     }
+
+    const validateInput = (value) => {
+        // Allow only numbers and one decimal point
+        return value === '' || /^\d*\.?\d*$/.test(value);
+    };
+
     const handleMinChange = (e) => {
         const value = e.target.value;
-        setMinInputValue(value);
-        onMinChange(value);
+        if (validateInput(value)) {
+            setMinInputValue(value);
+            onMinChange(value);
+            checkValidity(value, maxInputValue);
+        }
     };
 
     const handleMaxChange = (e) => {
         const value = e.target.value;
-        setMaxInputValue(value);
-        onMaxChange(value);
+        if (validateInput(value)) {
+            setMaxInputValue(value);
+            onMaxChange(value);
+            checkValidity(minInputValue, value);
+        }
     };
 
     const icon = type === 'price' ? '₾' : 'მ²';
@@ -39,13 +52,10 @@ const RangeInputs = ({ type, minValue, maxValue, onMinChange, onMaxChange }) => 
                 <div className="relative w-1/2">
                     <input
                         type="text"
-                        inputMode="numeric"
+                        inputMode="decimal"
                         placeholder="დან"
                         value={minInputValue}
-                        onChange={() => {
-                            handleMinChange();
-                            checkValidity(minInputValue, maxInputValue);
-                        }}
+                        onChange={handleMinChange}
                         className={inputStyle}
                     />
                     <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -55,13 +65,10 @@ const RangeInputs = ({ type, minValue, maxValue, onMinChange, onMaxChange }) => 
                 <div className="relative w-1/2">
                     <input
                         type="text"
-                        inputMode="numeric"
+                        inputMode="decimal"
                         placeholder="მდე"
                         value={maxInputValue}
-                        onChange={() => {
-                            handleMaxChange();
-                            checkValidity(minInputValue, maxInputValue);
-                        }}
+                        onChange={handleMaxChange}
                         className={inputStyle}
                     />
                     <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -69,8 +76,7 @@ const RangeInputs = ({ type, minValue, maxValue, onMinChange, onMaxChange }) => 
                     </span>
                 </div>
             </div>
-            {error && <span className="text-red-500 text-sm mt-[8px]">ჩაწერეთ ვალიდური მონაცემები.</span>}
-
+            {error && <span className="text-red-500 text-sm mt-[8px] block">ჩაწერეთ ვალიდური მონაცემები.</span>}
         </div>
     );
 };
