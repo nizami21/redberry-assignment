@@ -19,7 +19,7 @@ const BedroomDropdown = ({ bedroomOptions, onSelectionChange, isOpen, selectedFi
     };
 
     const handleChoose = () => {
-        onSelectionChange(selectedBedrooms.map(bedroom => ({ id: 1000+bedroom, name: `${bedroom} საძინებელი` })));
+        onSelectionChange(selectedBedrooms.map(bedroom => ({ id: 1000+bedroom, name: `${bedroom}` })));
     };
 
     if (!isOpen) return null;

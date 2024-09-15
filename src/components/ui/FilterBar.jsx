@@ -91,20 +91,32 @@ const FilterBar = ({ onAgentAdd, regions, bedrooms }) => {
                     <AddButton onClick={onAgentAdd} type='empty' text='აგენტის დამატება' />
                 </div>
             </div>
-            <div className='flex w-full pt-2'>
-                {Object.entries(selectedFilters).flatMap(([category, filters]) =>
-                    filters.map((filter) => (
-                        <div key={`${category}-${filter.id}`} className="bg-[#FFFFFF] border-[1px] border-[#DBDBDB] gap-[7.5px] flex items-center px-[10px] py-[6px] rounded-[43px] text-sm mr-2">
-                            <p className='text-sm'>{filter.name}</p>
-                            <img 
-                                src={CloseX}
-                                alt="close" 
-                                className="w-5 h-5 cursor-pointer"
-                                onClick={() => removeFilter(category, filter.id)}
-                            />
-                        </div>
-                    ))
-                )}
+            <div className='flex w-full items-center pt-2'>
+                <>
+                    {Object.entries(selectedFilters).flatMap(([category, filters]) =>
+                        filters.map((filter) => (
+                            <div key={`${category}-${filter.id}`} className="bg-[#FFFFFF] border-[1px] border-[#DBDBDB] gap-[7.5px] flex items-center px-[10px] py-[6px] rounded-[43px] text-sm mr-2">
+                                <p className='text-sm'>{filter.name}</p>
+                                <div className='flex justify-center items-center font-bold cursor-pointer text-[#354451] hover:text-[#354451]'
+                                    onClick={() => removeFilter(category, filter.id)}
+                                >
+                                    <svg width="12" height="11" viewBox="0 0 8 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7.5 1L0.5 8" stroke="#354451" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M0.5 1L7.5 8" stroke="#354451" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                    {Object.values(selectedFilters).flat().length > 0 && (
+                        <h1 className='ml-4 text-[#021526] cursor-pointer' onClick={() => setSelectedFilters({
+                            region: [],
+                            priceCategory: [],
+                            area: [],
+                            bedrooms: []
+                        })}>გასუფთავება</h1>
+                    )}
+                </>
             </div>
         </div>
     );

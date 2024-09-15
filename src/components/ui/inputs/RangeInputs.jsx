@@ -20,7 +20,7 @@ const RangeInputs = ({ type, minValue, maxValue, onMinChange, onMaxChange }) => 
     }
 
     const validateInput = (value) => {
-        // Allow only numbers and one decimal point
+        // Allow only numbers and one decimal point. I NEED TO LEARN REGEX :(((((((
         return value === '' || /^\d*\.?\d*$/.test(value);
     };
 
@@ -44,7 +44,7 @@ const RangeInputs = ({ type, minValue, maxValue, onMinChange, onMaxChange }) => 
 
     const icon = type === 'price' ? '₾' : 'მ²';
 
-    const inputStyle = "w-full h-[48px] px-3 pr-8 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-blue-500";
+    const inputStyle = `w-full h-[48px] px-3 pr-8 border border-gray-300 rounded-md text-sm focus:outline-none ${error ? 'border-red-500' : ''}`;
 
     return (
         <div>

@@ -9,15 +9,18 @@ const AreaDropdown = ({ onSelectionChange, isOpen, selectedFilters }) => {
 
     const priceOptions = [50000, 100000, 150000, 200000, 300000];
     useEffect(() => {
-        if (selectedFilters.length > 0) {
+        if (selectedFilters[0]?.min && selectedFilters.length > 0) {
             setMinArea(selectedFilters[0].min || '');
             setMaxArea(selectedFilters[0].max || '');
+        }else {
+            setMinArea('');
+            setMaxArea('');
         }
     }, [selectedFilters]);
 
     const handleChoose = () => {
         if (minArea || maxArea) {
-            onSelectionChange([{ id: 'area', min: minArea, max: maxArea, name: `${minArea} - ${maxArea} ₾` }]);
+            onSelectionChange([{ id: 'area', min: minArea, max: maxArea, name: `${minArea}მ² - ${maxArea}მ²` }]);
         }
     };
 
