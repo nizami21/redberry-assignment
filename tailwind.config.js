@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {},
+    fontFamily: {
+      'figaRO': ['figaRO', 'Arial', 'sans-serif'],
+    }
   },
   plugins: [],
 }

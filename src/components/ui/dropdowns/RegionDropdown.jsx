@@ -21,10 +21,9 @@ const RegionDropdown = ({ regions, onSelectionChange, isOpen, selectedFilters })
     onSelectionChange(selectedRegions);
   };
 
-  if (!isOpen) return null;
 
   return (
-    <div className="absolute z-10 w-[731px] p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px] left-0">
+    <div className={`absolute ${isOpen ? 'opacity-100' : 'opacity-0 -top-[3000px]'} transition-opacity duration-300 ease-in-out z-10 w-[731px] p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px] left-0`}>
       <div className="p-0">
         <h3 className="text-lg ml-2 font-semibold mb-6">რეგიონის მიხედვით</h3>
         <div className="grid grid-cols-3 gap-2">

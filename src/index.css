@@ -5,4 +5,11 @@
 .Main {
     height: 100%;
     width: 100%;
+}
+
+@layer base {
+  @font-face {
+    font-family: 'figaRo';
+    src: url('/src/assets/fonts/FiraGO.otf') format('trueType');
   }
+}

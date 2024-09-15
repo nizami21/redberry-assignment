@@ -48,51 +48,49 @@ const AreaDropdown = ({ onSelectionChange, isOpen, selectedFilters }) => {
             setMaxArea(value);
         }
     };
-
-    if (!isOpen) return null;
     
 
     return (
-        <div className="absolute z-10 w-[382px]  left-[360px] p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]">
-            <h3 className="text-lg font-semibold mb-6">ფართობის მიხედვით</h3>
-            <div className="flex justify-between mb-6">
-            <CustomRangeInput
-                type="area"
-                minValue={minArea}
-                maxValue={maxArea}
-                onMinChange={setMinArea}
-                onMaxChange={setMaxArea}
-            />
-            </div>
-            <div className="flex text-left mb-4">
-                <div className="w-1/2 text-left">
-                    <p className="text-sm font-semibold mb-[16px]">მინ. მ²</p>
-                    {priceOptions.map((price) => (
-                        <p
-                            key={`min-${price}`}
-                            onClick={() => handleAreaClick('min', price)}
-                            className="cursor-pointer hover:bg-gray-100 py-[2px] rounded transition-colors text-sm"
-                        >
-                            {price.toLocaleString()} მ²
-                        </p>
-                    ))}
+        <div className={`absolute ${isOpen ? 'opacity-100' : 'opacity-0 -top-[3000px]'} transition-opacity duration-300 ease-in-out z-10 w-[382px] left-[360px] p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]`}>
+                <h3 className="text-lg font-semibold mb-6">ფართობის მიხედვით</h3>
+                <div className="flex justify-between mb-6">
+                <CustomRangeInput
+                    type="area"
+                    minValue={minArea}
+                    maxValue={maxArea}
+                    onMinChange={setMinArea}
+                    onMaxChange={setMaxArea}
+                />
                 </div>
-                <div className="w-1/2 pl-3">
-                    <p className="text-sm text-left font-semibold mb-[16px]">მაქს. მ²</p>
-                    {priceOptions.map((price) => (
-                        <p
-                            key={`max-${price}`}
-                            onClick={() => handleAreaClick('max', price)}
-                            className="cursor-pointer hover:bg-gray-100 py-[2px] rounded transition-colors text-sm"
-                        >
-                            {price.toLocaleString()} მ²
-                        </p>
-                    ))}
+                <div className="flex text-left mb-4">
+                    <div className="w-1/2 text-left">
+                        <p className="text-sm font-semibold mb-[16px]">მინ. მ²</p>
+                        {priceOptions.map((price) => (
+                            <p
+                                key={`min-${price}`}
+                                onClick={() => handleAreaClick('min', price)}
+                                className="cursor-pointer hover:bg-gray-100 py-[2px] rounded transition-colors text-sm"
+                            >
+                                {price.toLocaleString()} მ²
+                            </p>
+                        ))}
+                    </div>
+                    <div className="w-1/2 pl-3">
+                        <p className="text-sm text-left font-semibold mb-[16px]">მაქს. მ²</p>
+                        {priceOptions.map((price) => (
+                            <p
+                                key={`max-${price}`}
+                                onClick={() => handleAreaClick('max', price)}
+                                className="cursor-pointer hover:bg-gray-100 py-[2px] rounded transition-colors text-sm"
+                            >
+                                {price.toLocaleString()} მ²
+                            </p>
+                        ))}
+                    </div>
                 </div>
-            </div>
-            <div className="flex justify-end pt-8">
-                <SelectButton onClick={handleChoose} />
-            </div>
+                <div className="flex justify-end pt-8">
+                    <SelectButton onClick={handleChoose} />
+                </div>
         </div>
     );
 };
