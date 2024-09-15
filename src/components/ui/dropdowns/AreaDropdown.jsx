@@ -20,7 +20,24 @@ const AreaDropdown = ({ onSelectionChange, isOpen, selectedFilters }) => {
 
     const handleChoose = () => {
         if (minArea || maxArea) {
-            onSelectionChange([{ id: 'area', min: minArea, max: maxArea, name: `${minArea}მ² - ${maxArea}მ²` }]);
+            if (maxArea && parseInt(maxArea) < parseInt(minArea)) return;
+
+            let name;
+            if (minArea && !maxArea) {
+                name = `${minArea} მ² დან`;
+            } else if (!minArea && maxArea) {
+                name = `${maxArea} მ² მდე`;
+            } else {
+                name = `${minArea} - ${maxArea} მ²`;
+            }
+
+            onSelectionChange([{
+                id: 'area',
+                min: minArea === '' ? 0 : parseInt(minArea),
+                max: maxArea === '' ? null : parseInt(maxArea),
+                name: name
+            }])
+
         }
     };
 

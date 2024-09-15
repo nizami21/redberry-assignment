@@ -5,7 +5,6 @@ import CustomRangeInput from '/src/components/ui/inputs/RangeInputs.jsx';
 const PriceDropdown = ({ onSelectionChange, isOpen, selectedFilters }) => {
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
-    console.log(selectedFilters);
 
     const priceOptions = [50000, 100000, 150000, 200000, 300000];
     useEffect(() => {
@@ -21,7 +20,23 @@ const PriceDropdown = ({ onSelectionChange, isOpen, selectedFilters }) => {
 
     const handleChoose = () => {
         if (minPrice || maxPrice) {
-            onSelectionChange([{ id: 'price', min: minPrice, max: maxPrice, name: `${minPrice}₾ - ${maxPrice}₾` }]);
+            if (maxPrice && parseInt(maxPrice) < parseInt(minPrice)) return;
+        
+            let name;
+            if (minPrice && !maxPrice) {
+                name = `${minPrice}₾ დან`;
+            } else if (!minPrice && maxPrice) {
+                name = `${maxPrice}₾ მდე`;
+            } else {
+                name = `${minPrice}₾ - ${maxPrice}₾`;
+            }
+    
+            onSelectionChange([{ 
+                id: 'price', 
+                min: minPrice === '' ? 0 : parseInt(minPrice), 
+                max: maxPrice === '' ? null : parseInt(maxPrice), 
+                name: name 
+            }]);
         }
     };
 

@@ -12,7 +12,7 @@ const RangeInputs = ({ type, minValue, maxValue, onMinChange, onMaxChange }) => 
     }, [minValue, maxValue]);
 
     const checkValidity = (min, max) => {
-        if (min && max && parseFloat(min) > parseFloat(max)) {
+        if (min && max && parseInt(min) > parseInt(max)) {
             setError(true);
         } else {
             setError(false);
@@ -20,8 +20,8 @@ const RangeInputs = ({ type, minValue, maxValue, onMinChange, onMaxChange }) => 
     }
 
     const validateInput = (value) => {
-        // Allow only numbers and one decimal point. I NEED TO LEARN REGEX :(((((((
-        return value === '' || /^\d*\.?\d*$/.test(value);
+        // Allow empty string or only integers
+        return value === '' || /^-?\d*$/.test(value);
     };
 
     const handleMinChange = (e) => {
@@ -52,7 +52,7 @@ const RangeInputs = ({ type, minValue, maxValue, onMinChange, onMaxChange }) => 
                 <div className="relative w-1/2">
                     <input
                         type="text"
-                        inputMode="decimal"
+                        inputMode="numeric"
                         placeholder="დან"
                         value={minInputValue}
                         onChange={handleMinChange}
@@ -65,7 +65,7 @@ const RangeInputs = ({ type, minValue, maxValue, onMinChange, onMaxChange }) => 
                 <div className="relative w-1/2">
                     <input
                         type="text"
-                        inputMode="decimal"
+                        inputMode="numeric"
                         placeholder="მდე"
                         value={maxInputValue}
                         onChange={handleMaxChange}

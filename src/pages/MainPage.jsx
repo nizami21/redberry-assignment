@@ -88,7 +88,7 @@ const MainPage = () => {
   };
 
   return (
-    <div className='w-screen min-h-screen bg-white'>
+    <div className='max-w-[1920px] min-h-[1080px] overflow-x-hidden bg-white'>
       <Header />
       <div className="px-[162px] py-8">
         {isLoading ? (

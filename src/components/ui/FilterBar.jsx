@@ -101,8 +101,8 @@ const FilterBar = ({ onAgentAdd, regions, bedrooms }) => {
                                     onClick={() => removeFilter(category, filter.id)}
                                 >
                                     <svg width="12" height="11" viewBox="0 0 8 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M7.5 1L0.5 8" stroke="#354451" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M0.5 1L7.5 8" stroke="#354451" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M7.5 1L0.5 8" stroke="#354451" strokeLinecap="round" strokeLinejoin="round"/>
+                                        <path d="M0.5 1L7.5 8" stroke="#354451" strokeLinecap="round" strokeLinejoin="round"/>
                                     </svg>
                                 </div>
                             </div>
