@@ -2,9 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import Header from '/src/components/ui/Header';
 import { apiGet, apiPost } from '../services/apiRequest';
 import AddAgentModal from '/src/components/modals/AddAgentModal';
+import AddButton from '/src/components/ui/inputs/AddButton.jsx';
 import { useNavigate } from 'react-router-dom';
+import CancelButton from '../components/ui/CancelButton';
+import CustomSelect from '../components/ui/inputs/CustomSelect';
 
-const NewListingPage = ({props}) => {
+const NewListingPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState(() => {
     const savedData = localStorage.getItem('newListingFormData');
@@ -23,6 +26,7 @@ const NewListingPage = ({props}) => {
     };
   });
 
+
   const [regions, setRegions] = useState([]);
   const [cities, setCities] = useState([]);
   const [agents, setAgents] = useState([]);
@@ -30,7 +34,6 @@ const NewListingPage = ({props}) => {
   const [errors, setErrors] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
   const agentModalRef = useRef();
-
 
 
   useEffect(() => {
@@ -49,14 +52,8 @@ const NewListingPage = ({props}) => {
         console.error('Error fetching data:', error);
       }
     };
-
     fetchData();
   }, []);
-
-  const handleAgentAdded = (newAgent) => {
-    setAgents(prevAgents => [...prevAgents, newAgent]);
-    setFormData(prev => ({ ...prev, agent_id: newAgent.id }));
-  };
 
   useEffect(() => {
     if (formData.region_id) {
@@ -70,6 +67,22 @@ const NewListingPage = ({props}) => {
   useEffect(() => {
     localStorage.setItem('newListingFormData', JSON.stringify(formData));
   }, [formData]);
+  const handleAgentAdded = (newAgent) => {
+    setAgents(prevAgents => [...prevAgents, newAgent]);
+    setFormData(prev => ({ ...prev, agent_id: newAgent.id }));
+  };
+
+
+  const handleSelectChange = (name, selectedOption) => {
+    console.log(`handleSelectChange called for ${name}:`, selectedOption);
+    setFormData(prev => ({ ...prev, [name]: selectedOption.id }));
+    
+    if (name === 'region_id') {
+      setFormData(prev => ({ ...prev, city_id: '' }));
+      const cityList = cities.filter(city => city.region_id === selectedOption.id);
+      setFilteredCities(cityList);
+    }
+  };
 
   const handleInputChange = (e) => {
     console.log(formData.is_rental);
@@ -148,16 +161,19 @@ const NewListingPage = ({props}) => {
     }
     return error;
   };
+
   const getInputClassName = (fieldName) => {
-    let baseClass = "w-full p-2 border rounded-md ";
-    if (!formData[fieldName]) return baseClass + "border-[#021526]";
+    let baseClass = "w-full mt-[5px] h-[42px] focus:outline-none p-2  border rounded-[6px] ";
+    if (!formData[fieldName]) return baseClass + "border-[#808A93]";
     return baseClass + (errors[fieldName] ? "border-[#F93B1D]" : "border-[#45A849]");
   };
 
   const getMessageClassName = (fieldName) => {
-    if (!formData[fieldName]) return "flex mt-[4px] text-xs text-[#021526]";
-    return errors[fieldName] ? "flex mt-[4px] text-xs text-[#F93B1D]" : "flex mt-[4px] text-xs text-[#45A849]";
+    const defaultStyle = "flex items-end mt-[4px] font-firaGO text-sm font-normal focus:outline-none focus:border-none leading-[16.8px] text-left";
+    if (!formData[fieldName]) return `${defaultStyle} text-[#021526]`;
+    return errors[fieldName] ? `${defaultStyle} text-[#F93B1D]` : `${defaultStyle} text-[#45A849]`;
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formErrors = {};
@@ -207,49 +223,56 @@ const NewListingPage = ({props}) => {
   
   
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen font-figaRO text-[#021526]">
       <Header />
       <div className="max-w-[790px] mx-auto bg-white p-8 shadow-sm mt-8">
         <h1 className="text-3xl font-bold text-center mb-[61px]">ლისტინგის დამატება</h1>
 
         <form onSubmit={handleSubmit}>
-          <div className="mb-20">
-
-            <label className="font-bold text-lg mb-4 block">განცხადების ტიპი</label>
-
-            <div className="flex">
-              <label className="flex items-center mr-4 ">
-                <input
-                  type="radio"
-                  name="is_rental"
-                  value={0}
-                  checked={formData.is_rental === 0}
-                  onChange={() => setFormData(prev => ({ ...prev, is_rental: 0 }))}
-                  className="mr-2 w-[17px] h-[17px] border-[#021526]"
-                />
-                <span className="text-lg">იყიდება</span>
-              </label>
-
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="is_rental"
-                  value={1}
-                  checked={formData.is_rental === 1}
-                  onChange={() => setFormData(prev => ({ ...prev, is_rental: 1 }))}
-                  className="mr-2 w-4 h-4"
-                />
-                <span className="text-lg">ქირავდება</span>
-              </label>
-
+        <div className="mb-20">
+        <h3 className="text-[18px] leading-[19.54px] font-medium mb-2 font-helveticaNeue">გარიგების ტიპი</h3>
+        <div className="flex space-x-6">
+          <label className="flex items-center cursor-pointer">
+            <div className="relative">
+              <input
+                type="radio"
+                name="is_rental"
+                value={0}
+                checked={formData.is_rental === 0}
+                onChange={() => setFormData(prev => ({ ...prev, is_rental: 0 }))}
+                className="sr-only"
+              />
+              <div className="w-[17px] h-[17px] border-[1px] border-[#021526] rounded-full">
+                <div className={`w-[7px] h-[7px] bg-[#021526] rounded-full absolute top-[5px] left-[5px] transition-opacity ${formData.is_rental === 0 ? 'opacity-100' : 'opacity-0'}`}></div>
+              </div>
             </div>
-          </div>
+            <span className="ml-2 text-base">გარიგების ტიპი</span>
+          </label>
+
+          <label className="flex items-center cursor-pointer">
+            <div className="relative">
+              <input
+                type="radio"
+                name="is_rental"
+                value={1}
+                checked={formData.is_rental === 1}
+                onChange={() => setFormData(prev => ({ ...prev, is_rental: 1 }))}
+                className="sr-only"
+              />
+              <div className="w-[17px] h-[17px] border-[1px] border-[#021526] rounded-full">
+                <div className={`w-[7px] h-[7px] bg-[#021526] rounded-full absolute top-[5px] left-[5px] transition-opacity ${formData.is_rental === 1 ? 'opacity-100' : 'opacity-0'}`}></div>
+              </div>
+            </div>
+            <span className="ml-2 text-base">გარიგების ტიპი</span>
+          </label>
+        </div>
+      </div>
 
           <div className="mb-20">
-            <label className="font-medium text-lg mb-4 block">მდებარეობა</label>
+            <label className="font-medium font-helveticaNeue text-lg mb-[22px] block">მდებარეობა</label>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <p className="mb-[5px]">მისამართი*</p>
+                <p className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">მისამართი*</p>
                 <input
                   type="text"
                   name="address"
@@ -259,14 +282,14 @@ const NewListingPage = ({props}) => {
                   placeholder="მისამართი"
                 />
                 <div className={getMessageClassName('address')}>
-                  <svg className="w-3 h-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   {errors.address || 'მინიმუმ ორი სიმბოლო'}
                 </div>
               </div>
               <div>
-                <p className="mb-[5px]">საფოსტო ინდექსი*</p>
+                <p className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">საფოსტო ინდექსი*</p>
                 <input
                   type="text"
                   name="zip_code"
@@ -276,7 +299,7 @@ const NewListingPage = ({props}) => {
                   placeholder="საფოსტო ინდექსი"
                 />
                   <div className={getMessageClassName('zip_code')}>
-                    <svg className="w-3 h-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     {errors.zip_code || 'მხოლოდ რიცხვები'}
@@ -285,43 +308,33 @@ const NewListingPage = ({props}) => {
             </div>
             <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="mb-[5px]">რეგიონი</p>
-              <select
-                name="region_id"
+              <p className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">რეგიონი</p>
+              <CustomSelect
+                options={regions}
+                onSelect={(option) => handleSelectChange('region_id', option)}
+                placeholder="აირჩიეთ"
                 value={formData.region_id}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-[#808A93] rounded-md"
-              >
-                <option value="">აირჩიეთ</option>
-                {regions && regions.length > 0 && regions.map(region => (
-                  <option key={region.id} value={region.id}>{region.name}</option>
-                ))}
-              </select>
+              />
             </div>
             <div>
-              <p className="mb-[5px]">ქალაქი</p>
-              <select
-                name="city_id"
+              <p className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">ქალაქი</p>
+              <CustomSelect
+                options={filteredCities}
+                onSelect={(option) => handleSelectChange('city_id', option)}
+                placeholder="აირჩიეთ"
                 value={formData.city_id}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-[#808A93] rounded-md"
                 disabled={!formData.region_id}
-              >
-                <option value="">აირჩიეთ</option>
-                {filteredCities.map(city => (
-                  <option key={city.id} value={city.id}>{city.name}</option>
-                ))}
-              </select>
+              />
             </div>
           </div>
           </div>
 
           <div className="mb-20">
             <div className='bottom-5'>
-              <label className="font-bold text-lg mb-4 block">ბინის დეტალები</label>
+              <label className="font-medium font-helveticaNeue text-lg mb-[22px] block">ბინის დეტალები</label>
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <p className="mb-[5px]">ფასი</p>
+                  <p className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">ფასი</p>
                   <input
                     type="text"
                     name="price"
@@ -331,14 +344,14 @@ const NewListingPage = ({props}) => {
                     placeholder="ფასი"
                   />
                   <div className={getMessageClassName('price')}>
-                    <svg className="w-3 h-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     {errors.price || 'მხოლოდ რიცხვები'}
                   </div>                  
                 </div>
                 <div>
-                  <p className="mb-[5px]">ფართობი</p>
+                  <p className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">ფართობი</p>
                   <input
                     type="text"
                     name="area"
@@ -348,7 +361,7 @@ const NewListingPage = ({props}) => {
                     placeholder="ფართობი"
                   />
                   <div className={getMessageClassName('area')}>
-                    <svg className="w-3 h-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     {errors.area || 'მხოლოდ რიცხვები'}
@@ -356,7 +369,7 @@ const NewListingPage = ({props}) => {
                 </div>
               </div>
               <div className="mb-4 w-1/2">
-                <p className="mb-[5px]">საძინებლების რაოდენობა</p>
+                <p className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">საძინებლების რაოდენობა*</p>
                 <input
                   type="text"
                   name="bedrooms"
@@ -366,7 +379,7 @@ const NewListingPage = ({props}) => {
                   placeholder="საძინებლების რაოდენობა"
                 />
               <div className={getMessageClassName('bedrooms')}>
-                <svg className="w-3 h-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 {errors.bedrooms || 'მხოლოდ მთელი რიცხვები'}
@@ -374,17 +387,17 @@ const NewListingPage = ({props}) => {
               </div>
             </div>
             <div className="bottom-[20px]">
-              <label className="font-bold text-base mb-[5px] block">აღწერა *</label>
+              <label className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">აღწერა *</label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
-                className={getInputClassName('description')}
+                className={`${getInputClassName('description')} resize-none h-[135px] focus:outline-none`}
                 rows="4"
                 placeholder="აღწერა"
               ></textarea>
               <div className={getMessageClassName('description')}>
-                <svg className="w-3 h-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 {errors.description || 'მინიმუმ ხუთი სიტყვა'}
@@ -392,81 +405,73 @@ const NewListingPage = ({props}) => {
             </div>
 
             <div className="">
-            <label className="font-bold text-base mt-5 mb-[5px] block">ატვირთეთ ფოტო *</label>
-            <input
-              type="file"
-              name="image"
-              onChange={handleFileChange}
-              className="hidden"
-              id="image-upload"
-              accept="image/*"
-            />
-            <div className="border-2 border-dashed border-[#2D3648] rounded-md p-4 flex items-center justify-center min-h-[120px]">
-              {!imagePreview ? (
-                <label 
-                  htmlFor="image-upload" 
-                  className="cursor-pointer flex flex-col items-center"
-                >
-                  <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M12 8V16" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M8 12H16" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <span className="text-sm text-gray-500">ატვირთეთ ფოტო</span>
-                </label>
-              ) : (
-                <div className="relative">
-                  <img src={imagePreview} alt="Uploaded preview" className="max-w-[100px] max-h-[100px] object-cover" />
-                  <button 
-                    onClick={removeImage}
-                    className="absolute -bottom-2 -right-2 bg-white p-1 rounded-full shadow-md"
-                    type="button"
+              <label className="font-medium text-base mt-5 mb-[5px] block">ატვირთეთ ფოტო *</label>
+              <input
+                type="file"
+                name="image"
+                onChange={handleFileChange}
+                className="hidden"
+                id="image-upload"
+                accept="image/*"
+              />
+              <div className="border-[1px] border-dashed border-[#2D3648] rounded-lg flex items-center justify-center h-[120px]">
+                {!imagePreview ? (
+                  <label 
+                    htmlFor="image-upload" 
+                    className="cursor-pointer flex flex-col items-center justify-center w-full h-full"
                   >
-                    <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 8V16" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M8 12H16" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                  </button>
-                </div>
-              )}
+                  </label>
+                ) : (
+                  <div className="relative">
+                    <img src={imagePreview} alt="Uploaded preview" className="max-w-[110px] max-h-[110px] object-cover rounded" />
+                    <button 
+                      onClick={removeImage}
+                      className="absolute -bottom-2 -right-2 bg-white p-1 rounded-full shadow-md"
+                      type="button"
+                    >
+                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
               </div>
-               {errors.image && (
+              {errors.image && (
                 <div className={getMessageClassName('image')}>
-                  <svg className="w-3 h-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   {errors.image || ''}
                 </div>
-               )}
-          </div>
+              )}
+            </div>
           </div>
 
           <div className="mb-20">
           </div>
 
           <div className="mb-20 w-1/2">
-            <label className="font-bold text-lg mb-4 block">აგენტი</label>
-            <p>აირჩიე</p>
-            <select
-              name="agent_id"
+            <label className="font-medium font-helveticaNeue text-lg mb-[22px] block">აგენტი</label>
+            <p className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">აირჩიე</p>
+            <CustomSelect
+              options={agents}
+              onSelect={(option) => handleSelectChange('agent_id', option)}
+              placeholder="აირჩიე აგენტი"
               value={formData.agent_id}
-              onChange={handleInputChange}
-              placeholder={'აირჩიე აგენტი'}
-              className="w-full p-2 border border-[#808A93] bg-none rounded-md"
-            >
-              <option value="">აირჩიე აგენტი</option>
-              <option value="add-agent">
-                აგენტის დამატება
-              </option>
-              {agents && agents.map(agent => (
-                <option key={agent.id} value={agent.id}>{agent.name}</option>
-              ))}
-            </select>
+              addOption="აგენტის დამატება"
+              onAddOption={() => agentModalRef.current.toggleModal()}
+            />
           </div>
         </form>
         
         <div className="flex justify-end space-x-4">
-          <button type="button" onClick={() => navigate(-1)} className="px-6 py-2 border border-gray-300 rounded-md text-gray-700">გაუქმება</button>
-          <button onClick={handleSubmit} className="px-6 py-2 bg-red-500 text-white rounded-md">დაამატე ლისტინგი</button>
+          <CancelButton onClick={() => navigate(-1)} />
+          <AddButton onClick={handleSubmit} type='filled' text='დაამატეთ ლისტინგი' noPlus={true} />
         </div>
       </div>
       <AddAgentModal ref={agentModalRef} onAgentAdded={handleAgentAdded}/>

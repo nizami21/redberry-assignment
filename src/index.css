@@ -12,4 +12,8 @@
     font-family: 'figaRo';
     src: url('/src/assets/fonts/FiraGO.otf') format('trueType');
   }
+  @font-face {
+    font-family: 'helveticaNeue';
+    src: url('/src/assets/fonts/helvetica-neue/HelveticaNeueMedium.otf') format('trueType');
+  }
 }

@@ -8,6 +8,7 @@ export default {
     extend: {},
     fontFamily: {
       'figaRO': ['figaRO', 'Arial', 'sans-serif'],
+      'helveticaNeue': ['helveticaNeue', 'Arial', 'sans-serif'],
     }
   },
   plugins: [],
