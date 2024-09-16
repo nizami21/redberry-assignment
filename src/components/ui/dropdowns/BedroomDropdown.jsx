@@ -26,7 +26,7 @@ const BedroomDropdown = ({ bedroomOptions, onSelectionChange, isOpen, selectedFi
 
     return (
         <div 
-        className={`absolute z-10 left-[508px] w-[300px] ${isOpen ? 'opacity-100' : 'opacity-0 -top-[3000px]'} transition-opacity duration-300 ease-in-out p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]`}>
+        className={`absolute z-10 left-[508px] w-[300px] ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} transition-opacity duration-300 ease-in-out p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]`}>
             <div className="p-0">
                 <h3 className="text-base pt-6 font-semibold mb-6">საძინებლების რაოდენობა</h3>
                 <div className="grid grid-cols-4 gap-2">

@@ -50,7 +50,7 @@ const PriceDropdown = ({ onSelectionChange, isOpen, selectedFilters }) => {
     
 
     return (
-        <div className={`absolute ${isOpen ? 'opacity-100' : 'opacity-0 -top-[3000px]'} transition-opacity duration-300 ease-in-out z-10 w-[382px]  left-[140px] p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]`}>
+        <div className={`absolute ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} transition-opacity duration-300 ease-in-out z-10 w-[382px]  left-[140px] p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]`}>
             <h3 className="text-lg font-semibold mb-6">ფასის მიხედვით</h3>
             <div className="flex justify-between mb-6">
             <CustomRangeInput
