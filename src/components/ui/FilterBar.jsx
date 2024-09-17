@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import chevronUp from '/src/assets/icons/chevronUp.svg';
 import chevronDown from '/src/assets/icons/chevronDown.svg';
@@ -9,40 +9,67 @@ import AddButton from './inputs/AddButton';
 import AreaDropdown from './dropdowns/AreaDropdown';
 import BedroomDropdown from './dropdowns/BedroomDropdown';
 
-const FilterBar = ({ onAgentAdd, regions, bedrooms }) => {
+const FilterBar = ({ onAgentAdd, regions, bedrooms, onFilter }) => {
     const navigate = useNavigate();
     const [activeButton, setActiveButton] = useState(null);
-    const [selectedFilters, setSelectedFilters] = useState({
-        region: [],
-        priceCategory: [],
-        area: [],
-        bedrooms: []
+    const [selectedFilters, setSelectedFilters] = useState(() => {
+        const savedFilters = localStorage.getItem('selectedFilters');
+        return savedFilters ? JSON.parse(savedFilters) : {
+            region: [],
+            priceCategory: [],
+            area: [],
+            bedrooms: []
+        };
     });
+
     const buttons = [
         { id: 'region', label: 'რეგიონი' },
         { id: 'priceCategory', label: 'საფასო კატეგორია' },
         { id: 'area', label: 'ფართობი' },
         { id: 'bedrooms', label: 'საძინებლების რაოდენობა' }
     ];
-    const handleFilterChange = (category, newFilters) => {
-        setSelectedFilters(prev => ({
-            ...prev,
-            [category]: newFilters
-        }));
+
+    const handleFilterChange = useCallback((category, newFilters) => {
+        setSelectedFilters(prev => {
+            const updatedFilters = {
+                ...prev,
+                [category]: newFilters
+            };
+            localStorage.setItem('selectedFilters', JSON.stringify(updatedFilters));
+            return updatedFilters;
+        });
         setActiveButton(null); // Close the dropdown
-    };
+    }, []);
 
     const handleButtonClick = (id) => {
         setActiveButton(activeButton === id ? null : id);
     };
 
     const removeFilter = (category, filterId) => {
-        setSelectedFilters(prev => ({
-            ...prev,
-            [category]: prev[category].filter(f => f.id !== filterId)
-        }));
-
+        setSelectedFilters(prev => {
+            const updatedFilters = {
+                ...prev,
+                [category]: prev[category].filter(f => f.id !== filterId)
+            };
+            localStorage.setItem('selectedFilters', JSON.stringify(updatedFilters));
+            return updatedFilters;
+        });
     };
+
+    const clearAllFilters = () => {
+        const emptyFilters = {
+            region: [],
+            priceCategory: [],
+            area: [],
+            bedrooms: []
+        };
+        setSelectedFilters(emptyFilters);
+        localStorage.setItem('selectedFilters', JSON.stringify(emptyFilters));
+    };
+
+    useEffect(() => {
+        onFilter(selectedFilters);
+    }, [selectedFilters, onFilter]);
 
     return (
         <div className="w-screen mb-10 bg-white">
@@ -60,6 +87,7 @@ const FilterBar = ({ onAgentAdd, regions, bedrooms }) => {
                             <div>
                                 <img src={activeButton !== button.id ? chevronDown : chevronUp}
                                     className="transition-all duration-300 ease-in-out"
+                                    alt={activeButton !== button.id ? "Chevron Down" : "Chevron Up"}
                                 />
                             </div>
                         </button>
@@ -84,6 +112,7 @@ const FilterBar = ({ onAgentAdd, regions, bedrooms }) => {
                         onSelectionChange={(newFilters) => handleFilterChange('bedrooms', newFilters)}
                         isOpen={activeButton === 'bedrooms'}
                         bedroomOptions={bedrooms}
+                        selectedFilters={selectedFilters.bedrooms}
                     />
                 </div>
                 <div className="flex space-x-4">
@@ -91,32 +120,25 @@ const FilterBar = ({ onAgentAdd, regions, bedrooms }) => {
                     <AddButton onClick={onAgentAdd} type='empty' text='აგენტის დამატება' />
                 </div>
             </div>
-            <div className='flex w-full items-center pt-2'>
-                <>
-                    {Object.entries(selectedFilters).flatMap(([category, filters]) =>
-                        filters.map((filter) => (
-                            <div key={`${category}-${filter.id}`} className="bg-[#FFFFFF] border-[1px] border-[#DBDBDB] gap-[7.5px] flex items-center px-[10px] py-[6px] rounded-[43px] text-sm mr-2">
-                                <p className='text-sm'>{filter.name}</p>
-                                <div className='flex justify-center items-center font-bold cursor-pointer text-[#354451] hover:text-[#354451]'
-                                    onClick={() => removeFilter(category, filter.id)}
-                                >
-                                    <svg width="12" height="11" viewBox="0 0 8 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M7.5 1L0.5 8" stroke="#354451" strokeLinecap="round" strokeLinejoin="round"/>
-                                        <path d="M0.5 1L7.5 8" stroke="#354451" strokeLinecap="round" strokeLinejoin="round"/>
-                                    </svg>
-                                </div>
+            <div className='flex w-[785px] flex-wrap gap-2 items-center pt-2'>
+                {Object.entries(selectedFilters).flatMap(([category, filters]) =>
+                    filters.map((filter) => (
+                        <div key={`${category}-${filter.id}`} className="bg-[#FFFFFF] border-[1px] border-[#DBDBDB] gap-[7.5px] flex items-center px-[10px] py-[6px] rounded-[43px] text-sm mr-2">
+                            <p className='text-sm'>{filter.name}</p>
+                            <div className='flex justify-center items-center font-bold cursor-pointer text-[#354451] hover:text-[#354451]'
+                                onClick={() => removeFilter(category, filter.id)}
+                            >
+                                <svg width="12" height="11" viewBox="0 0 8 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7.5 1L0.5 8" stroke="#354451" strokeLinecap="round" strokeLinejoin="round"/>
+                                    <path d="M0.5 1L7.5 8" stroke="#354451" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
                             </div>
-                        ))
-                    )}
-                    {Object.values(selectedFilters).flat().length > 0 && (
-                        <h1 className='ml-4 text-[#021526] cursor-pointer' onClick={() => setSelectedFilters({
-                            region: [],
-                            priceCategory: [],
-                            area: [],
-                            bedrooms: []
-                        })}>გასუფთავება</h1>
-                    )}
-                </>
+                        </div>
+                    ))
+                )}
+                {Object.values(selectedFilters).flat().length > 0 && (
+                    <h1 className='ml-4 text-[#021526] cursor-pointer' onClick={clearAllFilters}>გასუფთავება</h1>
+                )}
             </div>
         </div>
     );

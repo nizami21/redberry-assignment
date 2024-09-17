@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import SelectButton from '/src/components/ui/inputs/SelectButton.jsx';
 
 const BedroomDropdown = ({ bedroomOptions, onSelectionChange, isOpen, selectedFilters }) => {
-    const [selectedBedrooms, setSelectedBedrooms] = useState(selectedFilters || []);
+    const [selectedBedrooms, setSelectedBedrooms] = useState([]);
 
     useEffect(() => {
-        setSelectedBedrooms(selectedFilters || []);
+        // Update local state when selectedFilters prop changes
+        setSelectedBedrooms(selectedFilters.map(filter => parseInt(filter.name)));
     }, [selectedFilters]);
 
     const handleBedroomSelect = (bedroom) => {
@@ -21,8 +22,6 @@ const BedroomDropdown = ({ bedroomOptions, onSelectionChange, isOpen, selectedFi
     const handleChoose = () => {
         onSelectionChange(selectedBedrooms.map(bedroom => ({ id: 1000+bedroom, name: `${bedroom}` })));
     };
-
-
 
     return (
         <div 

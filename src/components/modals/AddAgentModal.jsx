@@ -182,7 +182,7 @@ const AddAgentModal = forwardRef((props, ref) => {
       <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onClick={toggleModal}></div>
       <div className="bg-white w-[1009px] px-[105px] py-[87px] flex-col items-center justify-center max-h-[90vh] overflow-y-hidden rounded-xl shadow-lg p-6 z-50" onClick={(e) => e.stopPropagation()}>
         <h2 className="text-3xl font-bold text-center mb-[61px]">აგენტის დამატება</h2>
-        <form className='w-full max-w-[799px] mx-auto mb-[94px]' onSubmit={handleSubmit}>
+        <form className='w-full max-w-[799px] mx-auto mb-[64px]' onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
               <label htmlFor="agentName" className="font-firaGO text-sm font-semibold leading-[16.8px] text-left">სახელი *</label>
@@ -258,7 +258,7 @@ const AddAgentModal = forwardRef((props, ref) => {
             </div> 
           </div>
 
-          <div className="mb-6">
+          <div className="mb-4">
             <label htmlFor="agentAvatar" className="font-firaGO text-sm font-semibold leading-[16.8px] text-left">აგენტის ფოტო *</label>
             <div className="border-[1px] border-dashed mt-[5px] border-[#2D3648] rounded-md p-0 flex items-center justify-center h-[120px]">
               {!avatarPreview ? (
@@ -297,7 +297,6 @@ const AddAgentModal = forwardRef((props, ref) => {
             />
             {errors.avatar && <p className="text-xs text-red-500 mt-1">{errors.avatar}</p>}
           </div>
-          
         </form>
         
         <div className="flex justify-end gap-2">

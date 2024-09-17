@@ -4,11 +4,11 @@ import areaLogo from '/src/assets/icons/area-logo.svg';
 import bedLogo from '/src/assets/icons/bed.svg';
 import locationLogo from '/src/assets/icons/location-marker.svg';
 
-const RealEstateCard = ({ price,city, location, bedrooms, area, zipcode, imageUrl, isRental }) => {
+const RealEstateCard = ({ price,city, location, bedrooms, area, zipcode, imageUrl, isRental, onClick }) => {
   const statusText = isRental ? "ქირავდება" : "იყიდება";
 
   return (
-    <div className="w-[384px] max-h-[455px] rounded-lg overflow-hidden shadow-none border-[1px] border-[#DBDBDB] hover:shadow-[5px_5px_12px_0px_rgba(2,21,38,0.08)] bg-white">
+    <div className="w-[384px] max-h-[455px] rounded-lg overflow-hidden shadow-none border-[1px] border-[#DBDBDB] hover:shadow-[5px_5px_12px_0px_rgba(2,21,38,0.08)] bg-white" onClick={onClick}>
       <div className="relative">
         <img className="w-full h-[307px] object-cover" src={imageUrl} alt="Property" />
         <div className="absolute top-3 left-3 bg-gray-800 bg-opacity-75 text-white px-3 py-1 rounded-full text-sm">
