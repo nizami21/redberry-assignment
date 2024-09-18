@@ -210,6 +210,7 @@ const NewListingPage = () => {
             agent_id: ''
           });
           setImagePreview(null);
+          navigate(-1);
         } else {
           console.error('Error in response:', response);
         }
@@ -392,7 +393,7 @@ const NewListingPage = () => {
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
-                className={`${getInputClassName('description')} resize-none h-[135px] focus:outline-none`}
+                className={`${getInputClassName('description')} resize-none min-h-[135px] focus:outline-none`}
                 rows="4"
                 placeholder="აღწერა"
               ></textarea>

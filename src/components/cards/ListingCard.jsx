@@ -8,11 +8,11 @@ const RealEstateCard = ({ price,city, location, bedrooms, area, zipcode, imageUr
   const statusText = isRental ? "ქირავდება" : "იყიდება";
 
   return (
-    <div className="w-[384px] max-h-[455px] rounded-lg overflow-hidden shadow-none border-[1px] border-[#DBDBDB] hover:shadow-[5px_5px_12px_0px_rgba(2,21,38,0.08)] bg-white" onClick={onClick}>
+    <div className="w-[384px] max-h-[455px] rounded-lg overflow-hidden shadow-none border-[1px] border-[#DBDBDB] hover:shadow-[5px_5px_12px_0px_rgba(2,21,38,0.08)] transition-shadow duration-150 delay-75 ease-in-out bg-white" onClick={onClick}>
       <div className="relative">
         <img className="w-full h-[307px] object-cover" src={imageUrl} alt="Property" />
-        <div className="absolute top-3 left-3 bg-gray-800 bg-opacity-75 text-white px-3 py-1 rounded-full text-sm">
-          {statusText}
+        <div className="absolute top-4 left-4 bg-[#021526] bg-opacity-50 min-w-[90px] h-[26px] text-white font-figaRO font-medium text-[12px] leading-[14.4px] text-center p-[6px] rounded-[15px]">
+            {statusText}
         </div>
       </div>
       <div className="p-4">

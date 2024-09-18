@@ -13,7 +13,7 @@ function Main() {
         <Routes>
           <Route path='/' element={<MainPage/>} />
           <Route path='/newListing' element={<NewListingPage/>} />
-          <Route path='/listing' element={<ListingPage/>} />
+          <Route path='/listing/:id' element={<ListingPage/>} />
         </Routes>
       </BrowserRouter>    
     </StrictMode>

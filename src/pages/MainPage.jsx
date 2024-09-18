@@ -16,12 +16,6 @@ const LoadingState = () => (
 );
 
 const MainPageContent = ({ filteredListings, regions, bedrooms, handleAgentAdd, handleFilter, handleListingClick }) => {
-  const navigate = useNavigate();
-
-  handleListingClick = useCallback((id) => {
-    navigate('/listing', { state: { id } });
-  }, [navigate]);
-
   return (
     <>
       <FilterBar onAgentAdd={handleAgentAdd} bedrooms={bedrooms} regions={regions} onFilter={handleFilter} />
@@ -30,7 +24,7 @@ const MainPageContent = ({ filteredListings, regions, bedrooms, handleAgentAdd, 
           {filteredListings.map((listing) => (
             <Suspense key={listing.id} fallback={<SkeletonCard />}>
               <LazyRealEstateCard 
-                onClick={() => handleListingClick(listing.id)}
+                onClick={() => handleListingClick(listing)}
                 price={listing.price}
                 city={listing.city}
                 location={listing.address}
@@ -57,6 +51,7 @@ const MainPage = () => {
   const [bedrooms, setBedrooms] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const agentModalRef = useRef();
+  const navigate = useNavigate();
   
   useEffect(() => {
     const fetchData = async () => {
@@ -83,42 +78,66 @@ const MainPage = () => {
   }, []);
 
   const handleFilter = useCallback((filters) => {
-    setFilteredListings(prevListings => 
+    setFilteredListings(prevListings =>
       listings.filter(listing => {
-        if (filters.region.length > 0 && !filters.region.some(region => region.id === listing.city.region_id)) {
-          return false;
+        
+        if (
+          filters.region.length === 0 &&
+          filters.priceCategory.length === 0 &&
+          filters.area.length === 0 &&
+          filters.bedrooms.length === 0
+        ) {
+          return true;
         }
-    
+  
+        let matchesAnyFilter = false;
+  
+        if (filters.region.length > 0) {
+          if (filters.region.some(region => region.id === listing.city.region_id)) {
+            matchesAnyFilter = true;
+          }
+        }
+  
         if (filters.priceCategory.length > 0) {
           const priceFilter = filters.priceCategory[0];
           if (
-            (priceFilter.min !== null && listing.price < priceFilter.min) ||
-            (priceFilter.max !== null && listing.price > priceFilter.max)
+            (priceFilter.min === null || listing.price >= priceFilter.min) &&
+            (priceFilter.max === null || listing.price <= priceFilter.max)
           ) {
-            return false;
+            matchesAnyFilter = true;
           }
         }
-    
+  
         if (filters.area.length > 0) {
           const areaFilter = filters.area[0];
           if (
-            (areaFilter.min !== null && listing.area < areaFilter.min) ||
-            (areaFilter.max !== null && listing.area > areaFilter.max)
+            (areaFilter.min === null || listing.area >= areaFilter.min) &&
+            (areaFilter.max === null || listing.area <= areaFilter.max)
           ) {
-            return false;
+            matchesAnyFilter = true;
           }
         }
-    
-        if (filters.bedrooms.length > 0 && !filters.bedrooms.some(bedroom => parseInt(bedroom.name) === listing.bedrooms)) {
-          return false;
+  
+        if (filters.bedrooms.length > 0) {
+          if (filters.bedrooms.some(bedroom => parseInt(bedroom.name) === listing.bedrooms)) {
+            matchesAnyFilter = true;
+          }
         }
-    
-        return true;
+  
+        return matchesAnyFilter;
       })
     );
   }, [listings]);
 
-
+  const handleListingClick = useCallback((listing) => {
+    const sameRegionListings = listings.filter(item => item.city.region_id === listing.city.region_id);
+    navigate(`/listing/${listing.id}`, { 
+      state: { 
+        id: listing.id, 
+        listings: sameRegionListings
+      } 
+    });
+  }, [listings, navigate]);
 
   return (
     <div className='max-w-[1920px] min-h-[1080px] overflow-x-hidden bg-white'>
@@ -133,6 +152,7 @@ const MainPage = () => {
             bedrooms={bedrooms}
             handleAgentAdd={handleAgentAdd}
             handleFilter={handleFilter}
+            handleListingClick={handleListingClick}
           />
         )}
       </div>
