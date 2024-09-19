@@ -4,33 +4,16 @@ import CancelButton from '/src/components/ui/CancelButton.jsx';
 import AddButton from '/src/components/ui/inputs/AddButton.jsx'
 
 const AddAgentModal = forwardRef((props, ref) => {
-  const [modalData, setModalData] = useState(() => {
-    const savedData = localStorage.getItem('addAgentModalData');
-    return savedData ? JSON.parse(savedData) : {
-      name: '',
-      surname: '',
-      email: '',
-      phone: ''
-    };
+  const [modalData, setModalData] = useState({
+    name: '',
+    surname: '',
+    email: '',
+    phone: ''
   });
   const [avatarFile, setAvatarFile] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(() => {
-    return localStorage.getItem('addAgentAvatarPreview') || null;
-  });
+  const [avatarPreview, setAvatarPreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    localStorage.setItem('addAgentModalData', JSON.stringify(modalData));
-  }, [modalData]);
-
-  useEffect(() => {
-    if (avatarPreview) {
-      localStorage.setItem('addAgentAvatarPreview', avatarPreview);
-    } else {
-      localStorage.removeItem('addAgentAvatarPreview');
-    }
-  }, [avatarPreview]);
 
   const validateField = useCallback((name, value) => {
     let error = '';
@@ -40,18 +23,23 @@ const AddAgentModal = forwardRef((props, ref) => {
         if (value.length < 2) {
           error = `${name === 'name' ? 'სახელი' : 'გვარი'} უნდა შეიცავდეს მინიმუმ 2 სიმბოლოს`;
         }
+        if (!value) error = 'ეს ველი სავალდებულოა';
         break;
       case 'email':
         if (!value.endsWith("@redberry.ge")) {
-          error = "იმეილი უნდა მთავრდებოდეს @redberry.ge-ით";
+          error = "ელ-ფოსტა უნდა მთავრდებოდეს @redberry.ge-ით";
         }
+        if (!value) error = 'ეს ველი სავალდებულოა';
         break;
       case 'phone':
         if (!/^\d*\.?\d*$/.test(value)) error = 'მხოლოდ რიცხვები';
-        if (name === 'bedrooms' && !Number.isInteger(Number(value))) error = 'მხოლოდ მთელი რიცხვები';
         if (!/^5\d{8}$/.test(value)) {
-          error = "ტელეფონის ნომერი უნდა იყოს ფორმატში: 5XXXXXXXXX";
+          error = "ფორმატი უნდა იყოს: 5XXXXXXXXX";
         }
+        if (!value) error = 'ეს ველი სავალდებულოა';
+        break;
+      case 'avatar':
+        if (!value) error = 'ავატარი სავალდებულოა';
         break;
       default:
         if (!value) error = 'ეს ველი სავალდებულოა';
@@ -62,28 +50,27 @@ const AddAgentModal = forwardRef((props, ref) => {
   const validateForm = useCallback(() => {
     const newErrors = {};
     Object.keys(modalData).forEach(key => {
-      if (key !== 'avatar') {  // Avatar is optional now
-        const error = validateField(key, modalData[key]);
-        if (error) newErrors[key] = error;
-      }
+      const error = validateField(key, modalData[key]);
+      if (error) newErrors[key] = error;
     });
+    if (!avatarFile) {
+      newErrors.avatar = 'ავატარი სავალდებულოა';
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [modalData, validateField]);
+  }, [modalData, avatarFile, validateField]);
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     let updatedValue = type === 'number' ? (value === '' ? '' : Number(value)) : value;
-    validateField(name, updatedValue);
     if (['phone'].includes(name)) {
-      updatedValue = value.replace(/[^\d.]/g, '');
       updatedValue = value.replace(/\D/g, '');
     }
     setModalData(prevState => ({
       ...prevState,
       [name]: updatedValue
     }));
-    const error = validateField(name, value);
+    const error = validateField(name, updatedValue);
     setErrors(prev => ({ ...prev, [name]: error }));
   };
 
@@ -107,13 +94,13 @@ const AddAgentModal = forwardRef((props, ref) => {
 
   const getMessageClassName = (fieldName) => {
     const defaultStyle = "flex items-end mt-[4px] font-firaGO text-sm font-normal focus:outline-none focus:border-none leading-[16.8px] text-left";
-    if (!modalData[fieldName]) return `${defaultStyle} text-[#021526]`;
+    if (!modalData[fieldName] && fieldName !== 'avatar') return `${defaultStyle} text-[#021526]`;
     return errors[fieldName] ? `${defaultStyle} text-[#F93B1D]` : `${defaultStyle} text-[#45A849]`;
   };
 
   const getInputClassName = (fieldName) => {
     let baseClass = "w-full mt-[5px] h-[42px] focus:outline-none p-2  border rounded-[6px] ";
-    if (!modalData[fieldName]) return baseClass + "border-[#808A93]";
+    if (!modalData[fieldName] && fieldName !== 'avatar') return baseClass + "border-[#808A93]";
     return baseClass + (errors[fieldName] ? "border-[#F93B1D]" : "border-[#45A849]");
   };
 
@@ -147,9 +134,6 @@ const AddAgentModal = forwardRef((props, ref) => {
           
           toggleModal();
           
-          localStorage.removeItem('addAgentModalData');
-          localStorage.removeItem('addAgentAvatarPreview');
-          
           // Reset form data
           setModalData({
             name: '',
@@ -159,6 +143,17 @@ const AddAgentModal = forwardRef((props, ref) => {
           });
           setAvatarFile(null);
           setAvatarPreview(null);
+        }
+        if (response.status === 422) {
+          console.log('Validation error:', response.data);
+          const newErrors = {};
+          Object.keys(response.data.errors).forEach(key => {
+            newErrors[key] = response.data.errors[key][0];
+          });
+          setErrors(newErrors);
+        }
+        if (response.status === 401) {
+          alert('Unauthorized request');
         }
       } catch (error) {
         console.error('Error adding agent:', error);
@@ -174,14 +169,13 @@ const AddAgentModal = forwardRef((props, ref) => {
     toggleModal
   }));
 
-
   if (!isModalOpen) return null;
 
   return (
-    <div className="fixed inset-0 w-screen h-screen flex justify-center items-center overflow-y-hidden font-figaRO z-50">
+    <div className="fixed inset-0 w-screen h-screen flex justify-center items-center overflow-y-hidden text-[#021526] font-figaRO z-50">
       <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onClick={toggleModal}></div>
       <div className="bg-white w-[1009px] px-[105px] py-[87px] flex-col items-center justify-center max-h-[90vh] overflow-y-hidden rounded-xl shadow-lg p-6 z-50" onClick={(e) => e.stopPropagation()}>
-        <h2 className="text-3xl font-bold text-center mb-[61px]">აგენტის დამატება</h2>
+        <h2 className="text-[32px] leading-[38.4px] font-bold text-center mb-[61px]">აგენტის დამატება</h2>
         <form className='w-full max-w-[799px] mx-auto mb-[64px]' onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
@@ -220,8 +214,7 @@ const AddAgentModal = forwardRef((props, ref) => {
                 {errors.surname || 'მინიმუმ ორი სიმბოლო'}
               </div> 
             </div>
-          </div>
-          <div className="mb-4">
+            <div className="">
             <label htmlFor="agentEmail" className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">ელ-ფოსტა *</label>
             <input
               type="email"
@@ -239,7 +232,7 @@ const AddAgentModal = forwardRef((props, ref) => {
               {errors.email || 'გამოიყენეთ @redberry.ge ფოსტა'}
             </div> 
           </div>
-          <div className="mb-4">
+          <div className="">
             <label htmlFor="agentPhone" className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">ტელეფონის ნომერი *</label>
             <input
               type="tel"
@@ -257,6 +250,8 @@ const AddAgentModal = forwardRef((props, ref) => {
               {errors.phone || 'მხოლოდ რიცხვები'}
             </div> 
           </div>
+          </div>
+
 
           <div className="mb-4">
             <label htmlFor="agentAvatar" className="font-firaGO text-sm font-semibold leading-[16.8px] text-left">აგენტის ფოტო *</label>
@@ -295,7 +290,14 @@ const AddAgentModal = forwardRef((props, ref) => {
               className="hidden"
               accept="image/*"
             />
-            {errors.avatar && <p className="text-xs text-red-500 mt-1">{errors.avatar}</p>}
+            {errors.avatar && (
+              <div className={getMessageClassName('avatar')}>
+              <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                {errors.avatar || ''}
+              </div>
+            )}
           </div>
         </form>
         

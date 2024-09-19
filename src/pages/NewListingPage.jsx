@@ -134,8 +134,14 @@ const NewListingPage = () => {
   const validateField = (name, value) => {
     let error = '';
     switch (name) {
+      case 'region_id':
+      case 'city_id':
+      case 'agent_id':
+        if (!value) error = 'ეს ველი სავალდებულოა';
+        break;
       case 'address':
         if (value.length < 2) error = 'მინიმუმ ორი სიმბოლო';
+        if (!value) error = 'ეს ველი სავალდებულოა';
         break;
       case 'zip_code':
       case 'price':
@@ -143,18 +149,27 @@ const NewListingPage = () => {
       case 'bedrooms':
         if (!/^\d*\.?\d*$/.test(value)) error = 'მხოლოდ რიცხვები';
         if (name === 'bedrooms' && !Number.isInteger(Number(value))) error = 'მხოლოდ მთელი რიცხვები';
+        if (!value) error = 'ეს ველი სავალდებულოა';
+
         break;
       case 'description':
         if (value.trim().split(/\s+/).length < 5) error = 'მინიმუმ ხუთი სიტყვა';
+        if (!value) error = 'ეს ველი სავალდებულოა';
+
         break;
       case 'image':
-        if (value.size > 1024 * 1024) { // 1MB in bytes
-          error = 'სურათი არ უნდა აღემატებოდეს 1MB-ს';
-        } else if (!value.type.startsWith('image/')) {
-          error = 'გთხოვთ ატვირთოთ მხოლოდ სურათი';
+        if(value) {
+          if (value.size > 1024 * 1024) { // 1MB in bytes
+            error = 'სურათი არ უნდა აღემატებოდეს 1MB-ს';
+          } else if (!value.type.startsWith('image/')) {
+            error = 'გთხოვთ ატვირთოთ მხოლოდ სურათი';
+          }
         }
+        if (!value) error = 'ეს ველი სავალდებულოა';
+
         break;
       case 'is_rental':
+        if (!value) error = 'ეს ველი სავალდებულოა';
         break;
       default:
         if (!value) error = 'ეს ველი სავალდებულოა';
@@ -211,6 +226,8 @@ const NewListingPage = () => {
           });
           setImagePreview(null);
           navigate(-1);
+        } else if (response.status === 401) {
+          alert('Unauthorized request');
         } else {
           console.error('Error in response:', response);
         }
@@ -247,7 +264,7 @@ const NewListingPage = () => {
                 <div className={`w-[7px] h-[7px] bg-[#021526] rounded-full absolute top-[5px] left-[5px] transition-opacity ${formData.is_rental === 0 ? 'opacity-100' : 'opacity-0'}`}></div>
               </div>
             </div>
-            <span className="ml-2 text-base">გარიგების ტიპი</span>
+            <span className="ml-2 text-base">იყიდება</span>
           </label>
 
           <label className="flex items-center cursor-pointer">
@@ -264,7 +281,7 @@ const NewListingPage = () => {
                 <div className={`w-[7px] h-[7px] bg-[#021526] rounded-full absolute top-[5px] left-[5px] transition-opacity ${formData.is_rental === 1 ? 'opacity-100' : 'opacity-0'}`}></div>
               </div>
             </div>
-            <span className="ml-2 text-base">გარიგების ტიპი</span>
+            <span className="ml-2 text-base">ქირავდება</span>
           </label>
         </div>
       </div>
@@ -296,7 +313,7 @@ const NewListingPage = () => {
                   name="zip_code"
                   value={formData.zip_code}
                   onChange={handleInputChange}
-                  className={getInputClassName('zip_code')}
+                  className={getInputClassName('city_id')}
                   placeholder="საფოსტო ინდექსი"
                 />
                   <div className={getMessageClassName('zip_code')}>
@@ -316,6 +333,14 @@ const NewListingPage = () => {
                 placeholder="აირჩიეთ"
                 value={formData.region_id}
               />
+              {errors.region_id && (
+                <div className={getMessageClassName('region_id')}>
+                  <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                    {errors.region_id || ''}
+                </div>
+              )}
             </div>
             <div>
               <p className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">ქალაქი</p>
@@ -326,6 +351,14 @@ const NewListingPage = () => {
                 value={formData.city_id}
                 disabled={!formData.region_id}
               />
+              {errors.city_id && (
+                <div className={getMessageClassName('zip_code')}>
+                  <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                    {errors.city_id || ''}
+                </div>
+              )}
             </div>
           </div>
           </div>
@@ -467,6 +500,14 @@ const NewListingPage = () => {
               addOption="აგენტის დამატება"
               onAddOption={() => agentModalRef.current.toggleModal()}
             />
+              {errors.agent_id && (
+                <div className={getMessageClassName('agent_id')}>
+                  <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                    {errors.agent_id || ''}
+                </div>
+              )}
           </div>
         </form>
         
