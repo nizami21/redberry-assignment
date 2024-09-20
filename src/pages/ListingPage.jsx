@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { apiDelete, apiGet } from '../services/apiRequest';
 import Header from '../components/ui/Header';
@@ -13,6 +13,7 @@ import leftIcon from '/src/assets/icons/left-arrow.svg';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import ConfirmModal from '../components/modals/ConfirmModal';
 
 const PrevArrow = (props) => {
     const { className, style, onClick } = props;
@@ -59,6 +60,7 @@ const ListingPage = () => {
         arrows: true,
     };
     
+    const confirmModalRef = useRef();
 
     const truncateDescription = (text, maxLength) => {
         if (text.length <= maxLength) return text;
@@ -189,7 +191,7 @@ const ListingPage = () => {
                                     </p>
                                 </div>
                             </div>
-                            <button className='w-1/4 min-h-[34px] min-w-[150px] text-[#808A93] hover:bg-[#808A93] hover:text-[#ffffff] rounded-[8px] border-[1px] border-[#808A93] font-figaRO font-medium text-[14px] leading-[16.8px] transition-all duration-150 delay-75 ease-in-out' onClick={handleListingDelete}>
+                            <button className='w-1/4 min-h-[34px] min-w-[150px] text-[#808A93] hover:bg-[#808A93] hover:text-[#ffffff] rounded-[8px] border-[1px] border-[#808A93] font-figaRO font-medium text-[14px] leading-[16.8px] transition-all duration-150 delay-75 ease-in-out' onClick={() => confirmModalRef.current.open()}>
                                 ლისტინგის წაშლა
                             </button>
                         </div>
@@ -224,6 +226,7 @@ const ListingPage = () => {
                 </div>
             </div>
             )}
+            <ConfirmModal ref={confirmModalRef} message='გსურთ წაშალოთ ლისტინგი?' onConfirm={handleListingDelete}/>
         </div>
     );
 
