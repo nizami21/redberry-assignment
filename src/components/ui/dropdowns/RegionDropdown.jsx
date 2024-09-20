@@ -10,9 +10,9 @@ const RegionDropdown = ({ regions, onSelectionChange, isOpen, selectedFilters })
   }, [selectedFilters]);
 
   const toggleRegion = (region) => {
-    setSelectedRegions(prev => 
-      prev.some(r => r.id === region.id) 
-        ? prev.filter(r => r.id !== region.id) 
+    setSelectedRegions(prev =>
+      prev.some(r => r.id === region.id)
+        ? prev.filter(r => r.id !== region.id)
         : [...prev, region]
     );
   };

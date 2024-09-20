@@ -78,9 +78,8 @@ const FilterBar = ({ onAgentAdd, regions, bedrooms, onFilter }) => {
                     {buttons.map((button) => (
                         <button
                             key={button.id}
-                            className={`flex rounded-md gap-1 items-center justify-center py-[8px] px-[14px] transition-all duration-300 ${
-                                activeButton === button.id ? 'bg-[#F3F3F3]' : 'bg-[#FFFFFF]'
-                            }`}
+                            className={`flex rounded-md gap-1 items-center justify-center py-[8px] px-[14px] transition-all duration-300 ${activeButton === button.id ? 'bg-[#F3F3F3]' : 'bg-[#FFFFFF]'
+                                }`}
                             onClick={() => handleButtonClick(button.id)}
                         >
                             <p className='font-figaRO font-bold text-base text-[#021526]'>{button.label}</p>
@@ -92,18 +91,18 @@ const FilterBar = ({ onAgentAdd, regions, bedrooms, onFilter }) => {
                             </div>
                         </button>
                     ))}
-                    <RegionDropdown 
-                        regions={regions} 
+                    <RegionDropdown
+                        regions={regions}
                         onSelectionChange={(newFilters) => handleFilterChange('region', newFilters)}
                         isOpen={activeButton === 'region'}
                         selectedFilters={selectedFilters.region}
                     />
-                    <PriceDropdown 
+                    <PriceDropdown
                         onSelectionChange={(newFilters) => handleFilterChange('priceCategory', newFilters)}
                         isOpen={activeButton === 'priceCategory'}
                         selectedFilters={selectedFilters.priceCategory}
                     />
-                    <AreaDropdown 
+                    <AreaDropdown
                         onSelectionChange={(newFilters) => handleFilterChange('area', newFilters)}
                         isOpen={activeButton === 'area'}
                         selectedFilters={selectedFilters.area}
@@ -129,8 +128,8 @@ const FilterBar = ({ onAgentAdd, regions, bedrooms, onFilter }) => {
                                 onClick={() => removeFilter(category, filter.id)}
                             >
                                 <svg width="12" height="11" viewBox="0 0 8 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7.5 1L0.5 8" stroke="#354451" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M0.5 1L7.5 8" stroke="#354451" strokeLinecap="round" strokeLinejoin="round"/>
+                                    <path d="M7.5 1L0.5 8" stroke="#354451" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M0.5 1L7.5 8" stroke="#354451" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </div>
                         </div>

@@ -124,16 +124,16 @@ const AddAgentModal = forwardRef((props, ref) => {
 
       try {
         const response = await apiPost('/agents', formData);
-        
+
         if (response.status === 201) {
           console.log('Agent added successfully:', response.data);
-          
+
           if (props.onAgentAdded) {
             props.onAgentAdded(response.data);
           }
-          
+
           toggleModal();
-          
+
           // Reset form data
           setModalData({
             name: '',
@@ -190,11 +190,11 @@ const AddAgentModal = forwardRef((props, ref) => {
                 required
               />
               <div className={getMessageClassName('name')}>
-                  <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
+                <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
                 {errors.name || 'მინიმუმ ორი სიმბოლო'}
-              </div> 
+              </div>
             </div>
             <div>
               <label htmlFor="agentSurname" className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">გვარი *</label>
@@ -208,48 +208,48 @@ const AddAgentModal = forwardRef((props, ref) => {
                 required
               />
               <div className={getMessageClassName('surname')}>
-                  <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
+                <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
                 {errors.surname || 'მინიმუმ ორი სიმბოლო'}
-              </div> 
+              </div>
             </div>
             <div className="">
-            <label htmlFor="agentEmail" className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">ელ-ფოსტა *</label>
-            <input
-              type="email"
-              id="agentEmail"
-              name="email"
-              value={modalData.email}
-              onChange={handleChange}
-              className={getInputClassName('email')}
-              required
-            />
-            <div className={getMessageClassName('email')}>
-                  <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-              {errors.email || 'გამოიყენეთ @redberry.ge ფოსტა'}
-            </div> 
-          </div>
-          <div className="">
-            <label htmlFor="agentPhone" className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">ტელეფონის ნომერი *</label>
-            <input
-              type="tel"
-              id="agentPhone"
-              name="phone"
-              value={modalData.phone}
-              onChange={handleChange}
-              className={getInputClassName('phone')}
-              required
-            />
-            <div className={getMessageClassName('phone')}>
-                  <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-              {errors.phone || 'მხოლოდ რიცხვები'}
-            </div> 
-          </div>
+              <label htmlFor="agentEmail" className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">ელ-ფოსტა *</label>
+              <input
+                type="email"
+                id="agentEmail"
+                name="email"
+                value={modalData.email}
+                onChange={handleChange}
+                className={getInputClassName('email')}
+                required
+              />
+              <div className={getMessageClassName('email')}>
+                <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                {errors.email || 'გამოიყენეთ @redberry.ge ფოსტა'}
+              </div>
+            </div>
+            <div className="">
+              <label htmlFor="agentPhone" className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">ტელეფონის ნომერი *</label>
+              <input
+                type="tel"
+                id="agentPhone"
+                name="phone"
+                value={modalData.phone}
+                onChange={handleChange}
+                className={getInputClassName('phone')}
+                required
+              />
+              <div className={getMessageClassName('phone')}>
+                <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                {errors.phone || 'მხოლოდ რიცხვები'}
+              </div>
+            </div>
           </div>
 
 
@@ -257,20 +257,20 @@ const AddAgentModal = forwardRef((props, ref) => {
             <label htmlFor="agentAvatar" className="font-firaGO text-sm font-semibold leading-[16.8px] text-left">აგენტის ფოტო *</label>
             <div className="border-[1px] border-dashed mt-[5px] border-[#2D3648] rounded-md p-0 flex items-center justify-center h-[120px]">
               {!avatarPreview ? (
-                <label 
-                  htmlFor="agentAvatar" 
+                <label
+                  htmlFor="agentAvatar"
                   className="cursor-pointer h-full w-full flex flex-col justify-center items-center"
                 >
                   <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M12 8V16" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M8 12H16" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M12 8V16" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M8 12H16" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </label>
               ) : (
                 <div className="relative">
                   <img src={avatarPreview} alt="Agent preview" className="max-w-[100px] max-h-[100px] object-cover" />
-                  <button 
+                  <button
                     onClick={removeAvatar}
                     className="absolute -bottom-2 -right-2 bg-white p-1 rounded-full shadow-md"
                     type="button"
@@ -292,15 +292,15 @@ const AddAgentModal = forwardRef((props, ref) => {
             />
             {errors.avatar && (
               <div className={getMessageClassName('avatar')}>
-              <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
                 {errors.avatar || ''}
               </div>
             )}
           </div>
         </form>
-        
+
         <div className="flex justify-end gap-2">
           <CancelButton onClick={toggleModal} />
           <AddButton noPlus={true} text='დაამატე აგენტი' onClick={handleSubmit} />

@@ -76,7 +76,7 @@ const NewListingPage = () => {
   const handleSelectChange = (name, selectedOption) => {
     console.log(`handleSelectChange called for ${name}:`, selectedOption);
     setFormData(prev => ({ ...prev, [name]: selectedOption.id }));
-    
+
     if (name === 'region_id') {
       setFormData(prev => ({ ...prev, city_id: '' }));
       const cityList = cities.filter(city => city.region_id === selectedOption.id);
@@ -88,7 +88,7 @@ const NewListingPage = () => {
     console.log(formData.is_rental);
     const { name, value, type } = e.target;
     let updatedValue = type === 'number' ? (value === '' ? '' : Number(value)) : value;
-    if(value == 'add-agent'){
+    if (value == 'add-agent') {
       agentModalRef.current.toggleModal();
     }
     if (['price', 'area', 'bedrooms', 'zip_code'].includes(name)) {
@@ -97,7 +97,7 @@ const NewListingPage = () => {
     }
     validateField(name, updatedValue);
     setFormData(prev => ({ ...prev, [name]: updatedValue }));
-    
+
     const error = validateField(name, updatedValue);
     setErrors(prev => ({ ...prev, [name]: error }));
 
@@ -115,8 +115,8 @@ const NewListingPage = () => {
         e.target.value = ''; // Clear the file input
         return;
       }
-      if(file.size > 1 * 1000 * 1024){
-        setErrors(prev => ({...prev, image: 'სურათის ზომა არ უნდა აღემატებოდეს 1MB-ს'}));
+      if (file.size > 1 * 1000 * 1024) {
+        setErrors(prev => ({ ...prev, image: 'სურათის ზომა არ უნდა აღემატებოდეს 1MB-ს' }));
         return;
       }
       setFormData(prev => ({ ...prev, image: file }));
@@ -158,7 +158,7 @@ const NewListingPage = () => {
 
         break;
       case 'image':
-        if(value) {
+        if (value) {
           if (value.size > 1024 * 1024) { // 1MB in bytes
             error = 'სურათი არ უნდა აღემატებოდეს 1MB-ს';
           } else if (!value.type.startsWith('image/')) {
@@ -197,7 +197,7 @@ const NewListingPage = () => {
       if (error) formErrors[key] = error;
     });
     setErrors(formErrors);
-  
+
     if (Object.keys(formErrors).length === 0) {
       try {
         const postData = new FormData();
@@ -207,9 +207,9 @@ const NewListingPage = () => {
           }
         });
         const response = await apiPost('/real-estates', postData);
-  
+
         if (response.status === 201) {
-          console.log('Real Estate added successfully:', response.data);          
+          console.log('Real Estate added successfully:', response.data);
           localStorage.removeItem('newListingFormData');
           setFormData({
             address: '',
@@ -238,8 +238,8 @@ const NewListingPage = () => {
       console.log("Form contains errors:", formErrors);
     }
   };
-  
-  
+
+
   return (
     <div className="min-h-screen font-figaRO text-[#021526]">
       <Header />
@@ -324,51 +324,51 @@ const NewListingPage = () => {
                   className={getInputClassName('city_id')}
                   placeholder="საფოსტო ინდექსი"
                 />
+                <div className={getMessageClassName('zip_code')}>
+                  <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  {errors.zip_code || 'მხოლოდ რიცხვები'}
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">რეგიონი</p>
+                <CustomSelect
+                  options={regions}
+                  onSelect={(option) => handleSelectChange('region_id', option)}
+                  placeholder="აირჩიეთ"
+                  value={formData.region_id}
+                />
+                {errors.region_id && (
+                  <div className={getMessageClassName('region_id')}>
+                    <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    {errors.region_id || ''}
+                  </div>
+                )}
+              </div>
+              <div>
+                <p className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">ქალაქი</p>
+                <CustomSelect
+                  options={filteredCities}
+                  onSelect={(option) => handleSelectChange('city_id', option)}
+                  placeholder="აირჩიეთ"
+                  value={formData.city_id}
+                  disabled={!formData.region_id}
+                />
+                {errors.city_id && (
                   <div className={getMessageClassName('zip_code')}>
                     <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    {errors.zip_code || 'მხოლოდ რიცხვები'}
-                  </div> 
+                    {errors.city_id || ''}
+                  </div>
+                )}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">რეგიონი</p>
-              <CustomSelect
-                options={regions}
-                onSelect={(option) => handleSelectChange('region_id', option)}
-                placeholder="აირჩიეთ"
-                value={formData.region_id}
-              />
-              {errors.region_id && (
-                <div className={getMessageClassName('region_id')}>
-                  <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                    {errors.region_id || ''}
-                </div>
-              )}
-            </div>
-            <div>
-              <p className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">ქალაქი</p>
-              <CustomSelect
-                options={filteredCities}
-                onSelect={(option) => handleSelectChange('city_id', option)}
-                placeholder="აირჩიეთ"
-                value={formData.city_id}
-                disabled={!formData.region_id}
-              />
-              {errors.city_id && (
-                <div className={getMessageClassName('zip_code')}>
-                  <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                    {errors.city_id || ''}
-                </div>
-              )}
-            </div>
-          </div>
           </div>
 
           <div className="mb-20">
@@ -390,7 +390,7 @@ const NewListingPage = () => {
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     {errors.price || 'მხოლოდ რიცხვები'}
-                  </div>                  
+                  </div>
                 </div>
                 <div>
                   <p className="font-firaGO text-sm font-semibold leading-[16.8px] text-left mb-[5px]">ფართობი</p>
@@ -420,12 +420,12 @@ const NewListingPage = () => {
                   className={getInputClassName('bedrooms')}
                   placeholder="საძინებლების რაოდენობა"
                 />
-              <div className={getMessageClassName('bedrooms')}>
-                <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                {errors.bedrooms || 'მხოლოდ მთელი რიცხვები'}
-              </div>
+                <div className={getMessageClassName('bedrooms')}>
+                  <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  {errors.bedrooms || 'მხოლოდ მთელი რიცხვები'}
+                </div>
               </div>
             </div>
             <div className="bottom-[20px]">
@@ -458,20 +458,20 @@ const NewListingPage = () => {
               />
               <div className="border-[1px] border-dashed border-[#2D3648] rounded-lg flex items-center justify-center h-[120px]">
                 {!imagePreview ? (
-                  <label 
-                    htmlFor="image-upload" 
+                  <label
+                    htmlFor="image-upload"
                     className="cursor-pointer flex flex-col items-center justify-center w-full h-full"
                   >
                     <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M12 8V16" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M8 12H16" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M12 8V16" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M8 12H16" stroke="#2D3648" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </label>
                 ) : (
                   <div className="relative">
                     <img src={imagePreview} alt="Uploaded preview" className="max-w-[110px] max-h-[110px] object-cover rounded" />
-                    <button 
+                    <button
                       onClick={removeImage}
                       className="absolute -bottom-2 -right-2 bg-white p-1 rounded-full shadow-md"
                       type="button"
@@ -508,23 +508,23 @@ const NewListingPage = () => {
               addOption="აგენტის დამატება"
               onAddOption={() => agentModalRef.current.toggleModal()}
             />
-              {errors.agent_id && (
-                <div className={getMessageClassName('agent_id')}>
-                  <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                    {errors.agent_id || ''}
-                </div>
-              )}
+            {errors.agent_id && (
+              <div className={getMessageClassName('agent_id')}>
+                <svg className="w-5 h-5  mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                {errors.agent_id || ''}
+              </div>
+            )}
           </div>
         </form>
-        
+
         <div className="flex justify-end space-x-4">
           <CancelButton onClick={() => navigate(-1)} />
           <AddButton onClick={handleSubmit} type='filled' text='დაამატეთ ლისტინგი' noPlus={true} />
         </div>
       </div>
-      <AddAgentModal ref={agentModalRef} onAgentAdded={handleAgentAdded}/>
+      <AddAgentModal ref={agentModalRef} onAgentAdded={handleAgentAdded} />
     </div>
   );
 };

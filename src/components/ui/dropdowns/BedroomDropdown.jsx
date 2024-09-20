@@ -20,12 +20,12 @@ const BedroomDropdown = ({ bedroomOptions, onSelectionChange, isOpen, selectedFi
     };
 
     const handleChoose = () => {
-        onSelectionChange(selectedBedrooms.map(bedroom => ({ id: 1000+bedroom, name: `${bedroom}` })));
+        onSelectionChange(selectedBedrooms.map(bedroom => ({ id: 1000 + bedroom, name: `${bedroom}` })));
     };
 
     return (
-        <div 
-        className={`absolute z-10 left-[508px] w-[300px] ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} font-figaRO text-[#021526] transition-opacity duration-300 ease-in-out p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]`}>
+        <div
+            className={`absolute z-10 left-[508px] w-[300px] ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} font-figaRO text-[#021526] transition-opacity duration-300 ease-in-out p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]`}>
             <div className="p-0">
                 <h3 className="text-base pt-0 font-semibold mb-6">საძინებლების რაოდენობა</h3>
                 <div className="grid grid-cols-4 gap-2">
@@ -33,11 +33,10 @@ const BedroomDropdown = ({ bedroomOptions, onSelectionChange, isOpen, selectedFi
                         <button
                             key={bedroom}
                             onClick={() => handleBedroomSelect(bedroom)}
-                            className={`w-[41px] h-[42px] flex items-center justify-center border ${
-                                selectedBedrooms.includes(bedroom)
-                                    ? 'border-[#021526] text-[#021526]'
-                                    : 'border-[#808A93] text-[#808A93]'
-                            } rounded-md text-lg font-medium focus:outline-none`}
+                            className={`w-[41px] h-[42px] flex items-center justify-center border ${selectedBedrooms.includes(bedroom)
+                                ? 'border-[#021526] text-[#021526]'
+                                : 'border-[#808A93] text-[#808A93]'
+                                } rounded-md text-lg font-medium focus:outline-none`}
                         >
                             {bedroom}
                         </button>

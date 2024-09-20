@@ -8,16 +8,16 @@ import ListingPage from './pages/ListingPage';
 import Page404 from './pages/Page404';
 
 function Main() {
-  return(
+  return (
     <StrictMode>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<MainPage/>} />
-          <Route path='/newListing' element={<NewListingPage/>} />
-          <Route path='/listing/:id' element={<ListingPage/>} />
-          <Route path='*' element={<Page404/>} />
+          <Route path='/' element={<MainPage />} />
+          <Route path='/newListing' element={<NewListingPage />} />
+          <Route path='/listing/:id' element={<ListingPage />} />
+          <Route path='*' element={<Page404 />} />
         </Routes>
-      </BrowserRouter>    
+      </BrowserRouter>
     </StrictMode>
   )
 }

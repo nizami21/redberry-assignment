@@ -61,7 +61,7 @@ const ListingPage = () => {
         prevArrow: <PrevArrow />,
         arrows: true,
     };
-    
+
     const confirmModalRef = useRef();
 
     const truncateDescription = (text, maxLength) => {
@@ -83,9 +83,9 @@ const ListingPage = () => {
                 console.error(error);
             }
         };
-        
+
         fetchData();
-        
+
     }, [id, navigate, listings]);
 
     if (!listing) {
@@ -100,10 +100,10 @@ const ListingPage = () => {
     const handleListingDelete = async () => {
         try {
             const res = await apiDelete(`/real-estates/${id}`);
-            if(res.status === 200) {
+            if (res.status === 200) {
                 navigate('/');
             }
-        }catch (error) {
+        } catch (error) {
             console.error(error);
         }
     }
@@ -114,7 +114,7 @@ const ListingPage = () => {
                 <button className="flex items-center text-gray-600 mb-[29px]" onClick={() => navigate('/')}>
                     <img src={leftIcon} alt="" className="w-6 h-6" />
                 </button>
-        
+
                 <div className="flex gap-[68px]">
                     <div>
                         <div className="relative">
@@ -131,7 +131,7 @@ const ListingPage = () => {
                             <p className="text-sm text-gray-500">გამოქვეყნების თარიღი: {formatDate(listing.created_at)}</p>
                         </div>
                     </div>
-            
+
                     <div className="w-[503px] h-[714px] flex flex-col">
                         <div className='min-w-[338px] pt-[30px] min-h-[246px]'>
                             <h2 className="text-[48px] leading-[57.6px] text-[#021526] font-black font-figaRO mb-6">{formatPrice(listing.price, true)}₾</h2>
@@ -156,12 +156,12 @@ const ListingPage = () => {
                         </div>
                         <div className="mt-6 mb-4 h-40 overflow-y-scroll">
                             <p className="font-normal font-figaRO text-[16px] leading-[26px] text-[#808A93]">
-                                {showFullDescription 
-                                    ? listing.description 
+                                {showFullDescription
+                                    ? listing.description
                                     : truncateDescription(listing.description, 160)}
                             </p>
                             {listing.description.length > 160 && (
-                                <button 
+                                <button
                                     onClick={() => setShowFullDescription(!showFullDescription)}
                                     className="text-blue-500 hover:text-blue-700 mt-2"
                                 >
@@ -201,34 +201,34 @@ const ListingPage = () => {
                 </div>
             </main>
             {listings.length > 1 && (
-            <div className='max-w-[1591px] mx-[162px] mt-[84px] mb-[150px]'>
-                <h2 className="text-2xl font-bold mb-[52px]">ბინები მსგავს ლოკაციაზე</h2>
-                <div className="relative">
-                    <Slider {...settings}>
-                        {listings.filter(item => item.id !== id).map((listing) => (
-                            <div key={listing.id} style={{ width: 'auto' }}>
-                                <div className="pr-4">
-                                    <ListingCard
-                                        onClick={(e) => {
-                                            navigate(`/listing/${listing.id}`, { state: { id: listing.id, listings } });
-                                        }}
-                                        price={listing.price}
-                                        city={listing.city}
-                                        location={listing.address}
-                                        bedrooms={listing.bedrooms}
-                                        area={listing.area}
-                                        zipcode={listing.zip_code}
-                                        imageUrl={listing.image}
-                                        isRental={listing.is_rental}
-                                    />
+                <div className='max-w-[1591px] mx-[162px] mt-[84px] mb-[150px]'>
+                    <h2 className="text-2xl font-bold mb-[52px]">ბინები მსგავს ლოკაციაზე</h2>
+                    <div className="relative">
+                        <Slider {...settings}>
+                            {listings.filter(item => item.id !== id).map((listing) => (
+                                <div key={listing.id} style={{ width: 'auto' }}>
+                                    <div className="pr-4">
+                                        <ListingCard
+                                            onClick={(e) => {
+                                                navigate(`/listing/${listing.id}`, { state: { id: listing.id, listings } });
+                                            }}
+                                            price={listing.price}
+                                            city={listing.city}
+                                            location={listing.address}
+                                            bedrooms={listing.bedrooms}
+                                            area={listing.area}
+                                            zipcode={listing.zip_code}
+                                            imageUrl={listing.image}
+                                            isRental={listing.is_rental}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </Slider>
+                            ))}
+                        </Slider>
+                    </div>
                 </div>
-            </div>
             )}
-            <ConfirmModal ref={confirmModalRef} message='გსურთ წაშალოთ ლისტინგი?' onConfirm={handleListingDelete}/>
+            <ConfirmModal ref={confirmModalRef} message='გსურთ წაშალოთ ლისტინგი?' onConfirm={handleListingDelete} />
         </div>
     );
 

@@ -23,7 +23,7 @@ const MainPageContent = ({ filteredListings, regions, bedrooms, handleAgentAdd, 
         <div className="grid grid-cols-4 gap-5">
           {filteredListings.map((listing) => (
             <Suspense key={listing.id} fallback={<SkeletonCard />}>
-              <LazyRealEstateCard 
+              <LazyRealEstateCard
                 onClick={() => handleListingClick(listing)}
                 price={listing.price}
                 city={listing.city}
@@ -52,7 +52,7 @@ const MainPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const agentModalRef = useRef();
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -80,7 +80,7 @@ const MainPage = () => {
   const handleFilter = useCallback((filters) => {
     setFilteredListings(prevListings =>
       listings.filter(listing => {
-        
+
         if (
           filters.region.length === 0 &&
           filters.priceCategory.length === 0 &&
@@ -89,15 +89,15 @@ const MainPage = () => {
         ) {
           return true;
         }
-  
+
         let matchesAnyFilter = false;
-  
+
         if (filters.region.length > 0) {
           if (filters.region.some(region => region.id === listing.city.region_id)) {
             matchesAnyFilter = true;
           }
         }
-  
+
         if (filters.priceCategory.length > 0) {
           const priceFilter = filters.priceCategory[0];
           if (
@@ -107,7 +107,7 @@ const MainPage = () => {
             matchesAnyFilter = true;
           }
         }
-  
+
         if (filters.area.length > 0) {
           const areaFilter = filters.area[0];
           if (
@@ -117,13 +117,13 @@ const MainPage = () => {
             matchesAnyFilter = true;
           }
         }
-  
+
         if (filters.bedrooms.length > 0) {
           if (filters.bedrooms.some(bedroom => parseInt(bedroom.name) === listing.bedrooms)) {
             matchesAnyFilter = true;
           }
         }
-  
+
         return matchesAnyFilter;
       })
     );
@@ -131,11 +131,11 @@ const MainPage = () => {
 
   const handleListingClick = useCallback((listing) => {
     const sameRegionListings = listings.filter(item => item.city.region_id === listing.city.region_id);
-    navigate(`/listing/${listing.id}`, { 
-      state: { 
-        id: listing.id, 
+    navigate(`/listing/${listing.id}`, {
+      state: {
+        id: listing.id,
         listings: sameRegionListings
-      } 
+      }
     });
   }, [listings, navigate]);
 

@@ -11,7 +11,7 @@ const PriceDropdown = ({ onSelectionChange, isOpen, selectedFilters }) => {
         if (selectedFilters[0]?.min && selectedFilters.length > 0) {
             setMinPrice(selectedFilters[0].min || '');
             setMaxPrice(selectedFilters[0].max || '');
-        }else {
+        } else {
             setMinPrice('');
             setMaxPrice('');
         }
@@ -21,7 +21,7 @@ const PriceDropdown = ({ onSelectionChange, isOpen, selectedFilters }) => {
     const handleChoose = () => {
         if (minPrice || maxPrice) {
             if (maxPrice && parseInt(maxPrice) < parseInt(minPrice)) return;
-        
+
             let name;
             if (minPrice && !maxPrice) {
                 name = `${minPrice}₾ დან`;
@@ -30,12 +30,12 @@ const PriceDropdown = ({ onSelectionChange, isOpen, selectedFilters }) => {
             } else {
                 name = `${minPrice}₾ - ${maxPrice}₾`;
             }
-    
-            onSelectionChange([{ 
-                id: 'price', 
-                min: minPrice === '' ? 0 : parseInt(minPrice), 
-                max: maxPrice === '' ? null : parseInt(maxPrice), 
-                name: name 
+
+            onSelectionChange([{
+                id: 'price',
+                min: minPrice === '' ? 0 : parseInt(minPrice),
+                max: maxPrice === '' ? null : parseInt(maxPrice),
+                name: name
             }]);
         }
     };
@@ -47,19 +47,19 @@ const PriceDropdown = ({ onSelectionChange, isOpen, selectedFilters }) => {
             setMaxPrice(value);
         }
     };
-    
+
 
     return (
         <div className={`absolute ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} font-figaRO text-[#021526] transition-opacity duration-300 ease-in-out z-10 w-[382px]  left-[140px] p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]`}>
             <h3 className="text-lg font-bold mb-6">ფასის მიხედვით</h3>
             <div className="flex justify-between mb-6">
-            <CustomRangeInput
-                type="price"
-                minValue={minPrice}
-                maxValue={maxPrice}
-                onMinChange={setMinPrice}
-                onMaxChange={setMaxPrice}
-            />
+                <CustomRangeInput
+                    type="price"
+                    minValue={minPrice}
+                    maxValue={maxPrice}
+                    onMinChange={setMinPrice}
+                    onMaxChange={setMaxPrice}
+                />
             </div>
             <div className="flex text-left mb-4">
                 <div className="w-1/2 text-left">

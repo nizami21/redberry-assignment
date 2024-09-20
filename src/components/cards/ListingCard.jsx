@@ -5,7 +5,7 @@ import bedLogo from '/src/assets/icons/bed.svg';
 import locationLogo from '/src/assets/icons/location-marker.svg';
 import { formatPrice } from '../../utilities/formatPrice';
 
-const RealEstateCard = ({ price,city, location, bedrooms, area, zipcode, imageUrl, isRental, onClick }) => {
+const RealEstateCard = ({ price, city, location, bedrooms, area, zipcode, imageUrl, isRental, onClick }) => {
   const statusText = isRental ? "ქირავდება" : "იყიდება";
 
   return (
@@ -13,7 +13,7 @@ const RealEstateCard = ({ price,city, location, bedrooms, area, zipcode, imageUr
       <div className="relative">
         <img className="w-full h-[307px] object-cover" src={imageUrl} alt="Property" />
         <div className="absolute top-4 left-4 bg-[#021526] bg-opacity-50 min-w-[90px] h-[26px] text-white font-figaRO font-medium text-[12px] leading-[14.4px] text-center p-[6px] rounded-[15px]">
-            {statusText}
+          {statusText}
         </div>
       </div>
       <div className="p-4">

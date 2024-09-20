@@ -6,9 +6,9 @@ const Page404 = () => {
     return (
         <div className="flex flex-col items-center justify-center h-screen text-center">
             <div className="text-6xl m-0">
-                <img 
-                    src={redberryLogo} 
-                    alt="Redberry Logo" 
+                <img
+                    src={redberryLogo}
+                    alt="Redberry Logo"
                     className="w-[150px] h-[24px] ml-4"
                 />
             </div>

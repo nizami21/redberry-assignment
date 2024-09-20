@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SelectButton = ({onClick }) => {
+const SelectButton = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
@@ -16,7 +16,7 @@ const SelectButton = ({onClick }) => {
         duration-200
       "
     >
-        არჩევა
+      არჩევა
     </button>
   );
 };
