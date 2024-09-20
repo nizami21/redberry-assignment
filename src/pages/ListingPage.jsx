@@ -16,6 +16,7 @@ import "slick-carousel/slick/slick-theme.css";
 import ConfirmModal from '../components/modals/ConfirmModal';
 import { formatPrice } from '../utilities/formatPrice';
 import { comma } from 'postcss/lib/list';
+import ListingPageSkeleton from '../components/ui/lazy/ListingPageSkeleton';
 
 const PrevArrow = (props) => {
     const { className, style, onClick } = props;
@@ -42,6 +43,7 @@ const NextArrow = (props) => {
         </div>
     );
 }
+
 
 const ListingPage = () => {
     const location = useLocation();
@@ -89,7 +91,7 @@ const ListingPage = () => {
     }, [id, navigate, listings]);
 
     if (!listing) {
-        return <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 animate-pulse text-[#021526] font-firaGo text-4xl'>იტვირთება...</div>;
+        return <ListingPageSkeleton />;
     }
 
     const formatDate = (dateString) => {
