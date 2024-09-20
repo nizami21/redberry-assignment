@@ -3,6 +3,7 @@ import addressLogo from '/src/assets/icons/address-post.svg';
 import areaLogo from '/src/assets/icons/area-logo.svg';
 import bedLogo from '/src/assets/icons/bed.svg';
 import locationLogo from '/src/assets/icons/location-marker.svg';
+import { formatPrice } from '../../utilities/formatPrice';
 
 const RealEstateCard = ({ price,city, location, bedrooms, area, zipcode, imageUrl, isRental, onClick }) => {
   const statusText = isRental ? "ქირავდება" : "იყიდება";
@@ -16,21 +17,21 @@ const RealEstateCard = ({ price,city, location, bedrooms, area, zipcode, imageUr
         </div>
       </div>
       <div className="p-4">
-        <div className="font-bold text-2xl mb-2">{price.toLocaleString()} ₾</div>
-        <p className="text-gray-600 text-sm flex items-center mb-3 gap-1">
-          <img src={locationLogo} className='w-5 h-5' />
+        <div className="font-black font-figaRO text-3xl mb-2">{formatPrice(price)} ₾</div>
+        <p className="text-gray-600 font-figaRo font-medium text-[16px] leading-[19.2px] flex items-center mb-3 gap-1">
+          <img src={locationLogo} className='w-5 h-5 pt-[1px] object-cover' />
           {city.name}, {location}
         </p>
-        <div className="flex justify-between text-sm text-gray-500">
-          <span className="flex items-center gap-1">
+        <div className="flex justify-start gap-[32px] text-sm text-gray-500">
+          <span className="flex items-center gap-1 font-figaRo font-medium text-[16px] leading-[19.2px]">
             <img src={bedLogo} className='w-6 h-6' />
             {bedrooms}
           </span>
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-1 font-figaRo font-medium text-[16px] leading-[19.2px]">
             <img src={areaLogo} className='w-4 h-5' />
             {area} მ²
           </span>
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-1 font-figaRo font-medium text-[16px] leading-[19.2px]">
             <img src={addressLogo} className='w-4 h-4' />
             {zipcode}
           </span>

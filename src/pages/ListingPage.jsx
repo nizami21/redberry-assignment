@@ -14,6 +14,8 @@ import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ConfirmModal from '../components/modals/ConfirmModal';
+import { formatPrice } from '../utilities/formatPrice';
+import { comma } from 'postcss/lib/list';
 
 const PrevArrow = (props) => {
     const { className, style, onClick } = props;
@@ -87,7 +89,7 @@ const ListingPage = () => {
     }, [id, navigate, listings]);
 
     if (!listing) {
-        return <div>Loading...</div>;
+        return <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 animate-pulse text-[#021526] font-figaRO text-4xl'>იტვირთება...</div>;
     }
 
     const formatDate = (dateString) => {
@@ -106,7 +108,7 @@ const ListingPage = () => {
         }
     }
     return (
-        <div className="bg-white min-w-screen min-h-[screen] font-sans text-[#021526]">
+        <div className="bg-white min-w-screen min-h-[screen] font-figaRO font-sans text-[#021526]">
             <Header />
             <main className="max-w-[1591px] h-[714px] mx-[162px] mt-[64px]">
                 <button className="flex items-center text-gray-600 mb-[29px]" onClick={() => navigate('/')}>
@@ -132,7 +134,7 @@ const ListingPage = () => {
             
                     <div className="w-[503px] h-[714px] flex flex-col">
                         <div className='min-w-[338px] pt-[30px] min-h-[246px]'>
-                            <h2 className="text-[48px] leading-[57.6px] text-[#021526] font-black font-figaRO mb-6">{listing.price.toLocaleString()}₾</h2>
+                            <h2 className="text-[48px] leading-[57.6px] text-[#021526] font-black font-figaRO mb-6">{formatPrice(listing.price, true)}₾</h2>
                             <div className="space-y-2 mb-6">
                                 <div className="flex items-center text-[#808A93] gap-2">
                                     <img src={locationMarker} alt="Location" className="w-5 h-5" />
@@ -156,9 +158,9 @@ const ListingPage = () => {
                             <p className="font-normal font-figaRO text-[16px] leading-[26px] text-[#808A93]">
                                 {showFullDescription 
                                     ? listing.description 
-                                    : truncateDescription(listing.description, 180)}
+                                    : truncateDescription(listing.description, 160)}
                             </p>
-                            {listing.description.length > 180 && (
+                            {listing.description.length > 160 && (
                                 <button 
                                     onClick={() => setShowFullDescription(!showFullDescription)}
                                     className="text-blue-500 hover:text-blue-700 mt-2"
@@ -200,7 +202,7 @@ const ListingPage = () => {
             </main>
             {listings.length > 1 && (
             <div className='max-w-[1591px] mx-[162px] mt-[84px] mb-[150px]'>
-                <h2 className="text-2xl font-bold mb-4">ბინები მსგავს ლოკაციაზე</h2>
+                <h2 className="text-2xl font-bold mb-[52px]">ბინები მსგავს ლოკაციაზე</h2>
                 <div className="relative">
                     <Slider {...settings}>
                         {listings.filter(item => item.id !== id).map((listing) => (

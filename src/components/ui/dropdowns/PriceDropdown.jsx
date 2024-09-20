@@ -50,8 +50,8 @@ const PriceDropdown = ({ onSelectionChange, isOpen, selectedFilters }) => {
     
 
     return (
-        <div className={`absolute ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} transition-opacity duration-300 ease-in-out z-10 w-[382px]  left-[140px] p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]`}>
-            <h3 className="text-lg font-semibold mb-6">ფასის მიხედვით</h3>
+        <div className={`absolute ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} font-figaRO text-[#021526] transition-opacity duration-300 ease-in-out z-10 w-[382px]  left-[140px] p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]`}>
+            <h3 className="text-lg font-bold mb-6">ფასის მიხედვით</h3>
             <div className="flex justify-between mb-6">
             <CustomRangeInput
                 type="price"
@@ -68,7 +68,7 @@ const PriceDropdown = ({ onSelectionChange, isOpen, selectedFilters }) => {
                         <p
                             key={`min-${price}`}
                             onClick={() => handlePriceClick('min', price)}
-                            className="cursor-pointer hover:bg-gray-100 py-[2px] rounded transition-colors text-sm"
+                            className="cursor-pointer hover:bg-gray-100 py-[2px] mb-[4px] text-[#2D3648] rounded transition-colors text-sm"
                         >
                             {price.toLocaleString()} ₾
                         </p>
@@ -80,7 +80,7 @@ const PriceDropdown = ({ onSelectionChange, isOpen, selectedFilters }) => {
                         <p
                             key={`max-${price}`}
                             onClick={() => handlePriceClick('max', price)}
-                            className="cursor-pointer hover:bg-gray-100 py-[2px] rounded transition-colors text-sm"
+                            className="cursor-pointer hover:bg-gray-100 py-[2px] mb-[4px] text-[#2D3648] rounded transition-colors text-sm"
                         >
                             {price.toLocaleString()} ₾
                         </p>

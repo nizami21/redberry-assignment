@@ -44,7 +44,7 @@ const RangeInputs = ({ type, minValue, maxValue, onMinChange, onMaxChange }) => 
 
     const icon = type === 'price' ? '₾' : 'მ²';
 
-    const inputStyle = `w-full h-[48px] px-3 pr-8 border border-gray-300 rounded-md text-sm focus:outline-none ${error ? 'border-red-500' : ''}`;
+    const inputStyle = `w-full h-[48px] px-3 pr-8 border border-[#808A93] rounded-md text-sm focus:outline-none ${error ? 'border-red-500' : ''}`;
 
     return (
         <div>
@@ -76,7 +76,7 @@ const RangeInputs = ({ type, minValue, maxValue, onMinChange, onMaxChange }) => 
                     </span>
                 </div>
             </div>
-            {error && <span className="text-red-500 text-sm mt-[8px] block">ჩაწერეთ ვალიდური მონაცემები.</span>}
+            {error && <span className="text-red-500 font-figaRO text-sm mt-[8px] block">ჩაწერეთ ვალიდური მონაცემები.</span>}
         </div>
     );
 };

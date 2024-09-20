@@ -25,9 +25,9 @@ const BedroomDropdown = ({ bedroomOptions, onSelectionChange, isOpen, selectedFi
 
     return (
         <div 
-        className={`absolute z-10 left-[508px] w-[300px] ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} transition-opacity duration-300 ease-in-out p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]`}>
+        className={`absolute z-10 left-[508px] w-[300px] ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} font-figaRO text-[#021526] transition-opacity duration-300 ease-in-out p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]`}>
             <div className="p-0">
-                <h3 className="text-base pt-6 font-semibold mb-6">საძინებლების რაოდენობა</h3>
+                <h3 className="text-base pt-0 font-semibold mb-6">საძინებლების რაოდენობა</h3>
                 <div className="grid grid-cols-4 gap-2">
                     {bedroomOptions.map((bedroom) => (
                         <button
@@ -35,8 +35,8 @@ const BedroomDropdown = ({ bedroomOptions, onSelectionChange, isOpen, selectedFi
                             onClick={() => handleBedroomSelect(bedroom)}
                             className={`w-[41px] h-[42px] flex items-center justify-center border ${
                                 selectedBedrooms.includes(bedroom)
-                                    ? 'border-blue-500 bg-blue-50'
-                                    : 'border-gray-300'
+                                    ? 'border-[#021526] text-[#021526]'
+                                    : 'border-[#808A93] text-[#808A93]'
                             } rounded-md text-lg font-medium focus:outline-none`}
                         >
                             {bedroom}
