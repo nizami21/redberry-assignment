@@ -74,7 +74,6 @@ const NewListingPage = () => {
 
 
   const handleSelectChange = (name, selectedOption) => {
-    console.log(`handleSelectChange called for ${name}:`, selectedOption);
     setFormData(prev => ({ ...prev, [name]: selectedOption.id }));
 
     if (name === 'region_id') {
@@ -85,7 +84,6 @@ const NewListingPage = () => {
   };
 
   const handleInputChange = (e) => {
-    console.log(formData.is_rental);
     const { name, value, type } = e.target;
     let updatedValue = type === 'number' ? (value === '' ? '' : Number(value)) : value;
     if (value == 'add-agent') {
@@ -209,7 +207,6 @@ const NewListingPage = () => {
         const response = await apiPost('/real-estates', postData);
 
         if (response.status === 201) {
-          console.log('Real Estate added successfully:', response.data);
           localStorage.removeItem('newListingFormData');
           setFormData({
             address: '',
@@ -234,8 +231,6 @@ const NewListingPage = () => {
       } catch (error) {
         console.error('Error adding real estate:', error);
       }
-    } else {
-      console.log("Form contains errors:", formErrors);
     }
   };
 

@@ -126,7 +126,6 @@ const AddAgentModal = forwardRef((props, ref) => {
         const response = await apiPost('/agents', formData);
 
         if (response.status === 201) {
-          console.log('Agent added successfully:', response.data);
 
           if (props.onAgentAdded) {
             props.onAgentAdded(response.data);
@@ -145,7 +144,6 @@ const AddAgentModal = forwardRef((props, ref) => {
           setAvatarPreview(null);
         }
         if (response.status === 422) {
-          console.log('Validation error:', response.data);
           const newErrors = {};
           Object.keys(response.data.errors).forEach(key => {
             newErrors[key] = response.data.errors[key][0];

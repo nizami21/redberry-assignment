@@ -22,7 +22,6 @@ async function apiRequest(method, endpoint, body = null) {
     }
   }
 
-  console.log(`Making ${method} request to ${url}`);
 
   try {
     const response = await fetch(url, options);
