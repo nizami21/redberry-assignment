@@ -5,6 +5,7 @@ import './index.css'
 import MainPage from './pages/MainPage';
 import NewListingPage from './pages/NewListingPage';
 import ListingPage from './pages/ListingPage';
+import Page404 from './pages/Page404';
 
 function Main() {
   return(
@@ -14,6 +15,7 @@ function Main() {
           <Route path='/' element={<MainPage/>} />
           <Route path='/newListing' element={<NewListingPage/>} />
           <Route path='/listing/:id' element={<ListingPage/>} />
+          <Route path='*' element={<Page404/>} />
         </Routes>
       </BrowserRouter>    
     </StrictMode>
