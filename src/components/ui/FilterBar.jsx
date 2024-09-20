@@ -83,7 +83,7 @@ const FilterBar = ({ onAgentAdd, regions, bedrooms, onFilter }) => {
                             }`}
                             onClick={() => handleButtonClick(button.id)}
                         >
-                            <p>{button.label}</p>
+                            <p className='font-figaRO font-bold text-base text-[#021526]'>{button.label}</p>
                             <div>
                                 <img src={activeButton !== button.id ? chevronDown : chevronUp}
                                     className="transition-all duration-300 ease-in-out"
