@@ -20,7 +20,7 @@ const AddButton = ({ text, onClick, type = 'filled', noPlus = false }) => {
           </svg>
         </span>
       )}
-      <p className='font-figaRO text-base leading-[19.2px] font-semibold text-center'>
+      <p className='font-firaGo text-base leading-[19.2px] font-semibold text-center'>
         {text}
       </p>
     </button>

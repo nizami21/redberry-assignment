@@ -3,13 +3,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { apiDelete, apiGet } from '../services/apiRequest';
 import Header from '../components/ui/Header';
 import ListingCard from '../components/cards/ListingCard';
-import phoneIcon from '/src/assets/icons/phone.svg';
-import emailIcon from '/src/assets/icons/email.svg';
-import areaLogo from '/src/assets/icons/area-logo.svg';
-import addressPost from '/src/assets/icons/address-post.svg';
-import bedLogo from '/src/assets/icons/bed.svg';
-import locationMarker from '/src/assets/icons/location-marker.svg';
-import leftIcon from '/src/assets/icons/left-arrow.svg';
+import phoneIcon from '/src/assets/img/phone.svg';
+import emailIcon from '/src/assets/img/email.svg';
+import areaLogo from '/src/assets/img/area-logo.svg';
+import addressPost from '/src/assets/img/address-post.svg';
+import bedLogo from '/src/assets/img/bed.svg';
+import locationMarker from '/src/assets/img/location-marker.svg';
+import leftIcon from '/src/assets/img/left-arrow.svg';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -89,7 +89,7 @@ const ListingPage = () => {
     }, [id, navigate, listings]);
 
     if (!listing) {
-        return <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 animate-pulse text-[#021526] font-figaRO text-4xl'>იტვირთება...</div>;
+        return <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 animate-pulse text-[#021526] font-firaGo text-4xl'>იტვირთება...</div>;
     }
 
     const formatDate = (dateString) => {
@@ -108,7 +108,7 @@ const ListingPage = () => {
         }
     }
     return (
-        <div className="bg-white min-w-screen min-h-[screen] font-figaRO font-sans text-[#021526]">
+        <div className="bg-white min-w-screen min-h-[screen] font-firaGo font-sans text-[#021526]">
             <Header />
             <main className="max-w-[1591px] h-[714px] mx-[162px] mt-[64px]">
                 <button className="flex items-center text-gray-600 mb-[29px]" onClick={() => navigate('/')}>
@@ -123,7 +123,7 @@ const ListingPage = () => {
                                 alt={listing.description}
                                 className="rounded-t-[14px] w-[839px] h-[670px] object-cover"
                             />
-                            <div className="absolute top-4 left-4 bg-[#021526] bg-opacity-50 min-w-[90px] h-[26px] text-white font-figaRO font-medium text-[12px] leading-[14.4px] text-center p-[6px] rounded-[15px]">
+                            <div className="absolute top-4 left-4 bg-[#021526] bg-opacity-50 min-w-[90px] h-[26px] text-white font-firaGo font-medium text-[12px] leading-[14.4px] text-center p-[6px] rounded-[15px]">
                                 {listing.is_rental ? 'ქირავდება' : 'იყიდება'}
                             </div>
                         </div>
@@ -134,28 +134,28 @@ const ListingPage = () => {
 
                     <div className="w-[503px] h-[714px] flex flex-col">
                         <div className='min-w-[338px] pt-[30px] min-h-[246px]'>
-                            <h2 className="text-[48px] leading-[57.6px] text-[#021526] font-black font-figaRO mb-6">{formatPrice(listing.price, true)}₾</h2>
+                            <h2 className="text-[48px] leading-[57.6px] text-[#021526] font-black font-firaGo mb-6">{formatPrice(listing.price, true)}₾</h2>
                             <div className="space-y-2 mb-6">
                                 <div className="flex items-center text-[#808A93] gap-2">
                                     <img src={locationMarker} alt="Location" className="w-5 h-5" />
-                                    <span className='font-figaRO text-[26px] leading-[28.8px] text-nowrap'>{listing.city.name}, {listing.address}</span>
+                                    <span className='font-firaGo text-[26px] leading-[28.8px] text-nowrap'>{listing.city.name}, {listing.address}</span>
                                 </div>
                                 <div className="flex items-center text-[#808A93] gap-2">
                                     <img src={areaLogo} alt="Area" className="w-5 h-5" />
-                                    <span className='font-figaRO text-[26px] leading-[28.8px]'>ფართი {listing.area} მ²</span>
+                                    <span className='font-firaGo text-[26px] leading-[28.8px]'>ფართი {listing.area} მ²</span>
                                 </div>
                                 <div className="flex items-center text-[#808A93] gap-2">
                                     <img src={bedLogo} alt="Bedrooms" className="w-5 h-5" />
-                                    <span className='font-figaRO text-[26px] leading-[28.8px]'>საძინებელი {listing.bedrooms}</span>
+                                    <span className='font-firaGo text-[26px] leading-[28.8px]'>საძინებელი {listing.bedrooms}</span>
                                 </div>
                                 <div className="flex items-center text-[#808A93] gap-2">
                                     <img src={addressPost} alt="Zip Code" className="w-5 h-5" />
-                                    <span className='font-figaRO text-[26px] leading-[28.8px]'>საფოსტო ინდექსი {listing.zip_code}</span>
+                                    <span className='font-firaGo text-[26px] leading-[28.8px]'>საფოსტო ინდექსი {listing.zip_code}</span>
                                 </div>
                             </div>
                         </div>
                         <div className="mt-6 mb-4 h-40 overflow-y-scroll">
-                            <p className="font-normal font-figaRO text-[16px] leading-[26px] text-[#808A93]">
+                            <p className="font-normal font-firaGo text-[16px] leading-[26px] text-[#808A93]">
                                 {showFullDescription
                                     ? listing.description
                                     : truncateDescription(listing.description, 160)}
@@ -178,22 +178,22 @@ const ListingPage = () => {
                                         className="w-[64px] h-[64px] rounded-full mr-4"
                                     />
                                     <div>
-                                        <p className="font-normal font-figaRO text-[16px] leading-[19.2px]">{listing.agent.name} {listing.agent.surname}</p>
-                                        <p className="font-normal font-figaRO text-[14px] leading-[16.8px] text-[#676E76] pt-1">აგენტი</p>
+                                        <p className="font-normal font-firaGo text-[16px] leading-[19.2px]">{listing.agent.name} {listing.agent.surname}</p>
+                                        <p className="font-normal font-firaGo text-[14px] leading-[16.8px] text-[#676E76] pt-1">აგენტი</p>
                                     </div>
                                 </div>
                                 <div className='mt-4 flex-col gap-[4px]'>
-                                    <p className='flex items-center gap-[5px] font-normal font-figaRO text-[14px] leading-[16.8px] text-[#808A93]'>
+                                    <p className='flex items-center gap-[5px] font-normal font-firaGo text-[14px] leading-[16.8px] text-[#808A93]'>
                                         <img src={emailIcon} alt="email icon" className="w-4 h-4" />
                                         {listing.agent.email}
                                     </p>
-                                    <p className='flex items-center gap-[5px] font-normal font-figaRO text-[14px] leading-[16.8px] text-[#808A93]'>
+                                    <p className='flex items-center gap-[5px] font-normal font-firaGo text-[14px] leading-[16.8px] text-[#808A93]'>
                                         <img src={phoneIcon} alt="phone icon" className="w-4 h-4" />
                                         {listing.agent.phone}
                                     </p>
                                 </div>
                             </div>
-                            <button className='w-1/4 min-h-[34px] min-w-[150px] text-[#808A93] hover:bg-[#808A93] hover:text-[#ffffff] rounded-[8px] border-[1px] border-[#808A93] font-figaRO font-medium text-[14px] leading-[16.8px] transition-all duration-150 delay-75 ease-in-out' onClick={() => confirmModalRef.current.open()}>
+                            <button className='w-1/4 min-h-[34px] min-w-[150px] text-[#808A93] hover:bg-[#808A93] hover:text-[#ffffff] rounded-[8px] border-[1px] border-[#808A93] font-firaGo font-medium text-[14px] leading-[16.8px] transition-all duration-150 delay-75 ease-in-out' onClick={() => confirmModalRef.current.open()}>
                                 ლისტინგის წაშლა
                             </button>
                         </div>

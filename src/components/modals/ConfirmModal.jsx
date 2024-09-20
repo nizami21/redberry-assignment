@@ -42,7 +42,7 @@ const ConfirmModal = forwardRef(({ onConfirm, message }, ref) => {
                 </button>
 
                 <div className="flex flex-col items-center justify-center h-full">
-                    <p className="mb-[35px] font-figaRO font-medium text-[20px] leading-[24px] text-[#2D3648]">{message}</p>
+                    <p className="mb-[35px] font-firaGo font-medium text-[20px] leading-[24px] text-[#2D3648]">{message}</p>
                     <div className="flex justify-center space-x-4">
                         <CancelButton onClick={() => ref.current.close()} />
                         <AddButton onClick={onConfirm} noPlus={true} text='დადასტურება' type='filled' />

@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import chevronUp from '/src/assets/icons/chevronUp.svg';
-import chevronDown from '/src/assets/icons/chevronDown.svg';
-import CloseX from '/src/assets/icons/x.svg';
+import chevronUp from '/src/assets/img/chevronUp.svg';
+import chevronDown from '/src/assets/img/chevronDown.svg';
+import CloseX from '/src/assets/img/x.svg';
 import RegionDropdown from '/src/components/ui/dropdowns/RegionDropdown.jsx';
 import PriceDropdown from '/src/components/ui/dropdowns/PriceDropdown.jsx';
 import AddButton from './inputs/AddButton';
@@ -82,7 +82,7 @@ const FilterBar = ({ onAgentAdd, regions, bedrooms, onFilter }) => {
                                 }`}
                             onClick={() => handleButtonClick(button.id)}
                         >
-                            <p className='font-figaRO font-bold text-base text-[#021526]'>{button.label}</p>
+                            <p className='font-firaGo font-bold text-base text-[#021526]'>{button.label}</p>
                             <div>
                                 <img src={activeButton !== button.id ? chevronDown : chevronUp}
                                     className="transition-all duration-300 ease-in-out"

@@ -76,7 +76,7 @@ const RangeInputs = ({ type, minValue, maxValue, onMinChange, onMaxChange }) => 
                     </span>
                 </div>
             </div>
-            {error && <span className="text-red-500 font-figaRO text-sm mt-[8px] block">ჩაწერეთ ვალიდური მონაცემები.</span>}
+            {error && <span className="text-red-500 font-firaGo text-sm mt-[8px] block">ჩაწერეთ ვალიდური მონაცემები.</span>}
         </div>
     );
 };

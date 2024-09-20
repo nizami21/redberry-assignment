@@ -241,7 +241,7 @@ const NewListingPage = () => {
 
 
   return (
-    <div className="min-h-screen font-figaRO text-[#021526]">
+    <div className="min-h-screen font-firaGo text-[#021526]">
       <Header />
       <div className="max-w-[790px] mx-auto bg-white p-8 shadow-sm mt-8">
         <h1 className="text-3xl font-bold text-center mb-[61px]">ლისტინგის დამატება</h1>

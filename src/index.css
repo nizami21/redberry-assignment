@@ -9,7 +9,7 @@
 
 @layer base {
   @font-face {
-    font-family: 'figaRo';
+    font-family: 'firaGo';
     src: url('/src/assets/fonts/FiraGO.otf') format('trueType');
   }
   @font-face {

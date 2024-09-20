@@ -172,7 +172,7 @@ const AddAgentModal = forwardRef((props, ref) => {
   if (!isModalOpen) return null;
 
   return (
-    <div className="fixed inset-0 w-screen h-screen flex justify-center items-center overflow-y-hidden text-[#021526] font-figaRO z-50">
+    <div className="fixed inset-0 w-screen h-screen flex justify-center items-center overflow-y-hidden text-[#021526] font-firaGo z-50">
       <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onClick={toggleModal}></div>
       <div className="bg-white w-[1009px] px-[105px] py-[87px] flex-col items-center justify-center max-h-[90vh] overflow-y-hidden rounded-xl shadow-lg p-6 z-50" onClick={(e) => e.stopPropagation()}>
         <h2 className="text-[32px] leading-[38.4px] font-bold text-center mb-[61px]">აგენტის დამატება</h2>

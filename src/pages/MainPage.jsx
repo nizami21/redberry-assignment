@@ -38,7 +38,7 @@ const MainPageContent = ({ filteredListings, regions, bedrooms, handleAgentAdd, 
           ))}
         </div>
       ) : (
-        <div className='font-figaRO text-xl leading-6 font-medium text-left w-full'>აღნიშნული მონაცემებით განცხადება არ იძებნება</div>
+        <div className='font-firaGo text-xl leading-6 font-medium text-left w-full'>აღნიშნული მონაცემებით განცხადება არ იძებნება</div>
       )}
     </>
   );

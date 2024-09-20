@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {},
     fontFamily: {
-      'figaRO': ['figaRO', 'Arial', 'sans-serif'],
+      'firaGo': ['firaGo', 'Arial', 'sans-serif'],
       'helveticaNeue': ['helveticaNeue', 'Arial', 'sans-serif'],
     }
   },

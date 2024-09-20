@@ -51,7 +51,7 @@ const AreaDropdown = ({ onSelectionChange, isOpen, selectedFilters }) => {
 
 
     return (
-        <div className={`absolute ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} font-figaRO text-[#021526] transition-opacity duration-300 ease-in-out z-10 w-[382px] left-[360px] p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]`}>
+        <div className={`absolute ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} font-firaGo text-[#021526] transition-opacity duration-300 ease-in-out z-10 w-[382px] left-[360px] p-6 mt-1 bg-white border border-gray-300 rounded-[10px] shadow-lg top-[50px]`}>
             <h3 className="text-lg font-semibold mb-6">ფართობის მიხედვით</h3>
             <div className="flex justify-between mb-6">
                 <CustomRangeInput
