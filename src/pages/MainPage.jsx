@@ -2,16 +2,21 @@ import React, { useEffect, useRef, useState, lazy, Suspense, useCallback } from 
 import { apiGet } from '../services/apiRequest';
 import Header from '../components/ui/Header';
 import FilterBar from '../components/ui/FilterBar';
+import FilterBarSkeleton from '../components/ui/lazy/FilterBarSkeleton';
 import AddAgentModal from '../components/modals/AddAgentModal';
 import SkeletonCard from '../components/cards/lazy/ListingCardSkeleton';
 import { useNavigate } from 'react-router-dom';
 
 const LazyRealEstateCard = lazy(() => import('/src/components/cards/ListingCard'));
+
 const LoadingState = () => (
-  <div className="grid grid-cols-4 gap-5">
-    {[...Array(8)].map((_, index) => (
-      <SkeletonCard key={index} />
-    ))}
+  <div>
+    <FilterBarSkeleton />
+    <div className="grid grid-cols-4 gap-5">
+      {[...Array(8)].map((_, index) => (
+        <SkeletonCard key={index} />
+      ))}
+    </div>
   </div>
 );
 
