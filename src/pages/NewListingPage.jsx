@@ -169,7 +169,7 @@ const NewListingPage = () => {
 
         break;
       case 'is_rental':
-        if (!value) error = 'ეს ველი სავალდებულოა';
+        if (value === null) error = 'გთხოვთ აირჩიოთ გარიგების ტიპი';
         break;
       default:
         if (!value) error = 'ეს ველი სავალდებულოა';
@@ -247,44 +247,52 @@ const NewListingPage = () => {
         <h1 className="text-3xl font-bold text-center mb-[61px]">ლისტინგის დამატება</h1>
 
         <form onSubmit={handleSubmit}>
-        <div className="mb-20">
-        <h3 className="text-[18px] leading-[19.54px] font-medium mb-2 font-helveticaNeue">გარიგების ტიპი</h3>
-        <div className="flex space-x-6">
-          <label className="flex items-center cursor-pointer">
-            <div className="relative">
-              <input
-                type="radio"
-                name="is_rental"
-                value={0}
-                checked={formData.is_rental === 0}
-                onChange={() => setFormData(prev => ({ ...prev, is_rental: 0 }))}
-                className="sr-only"
-              />
-              <div className="w-[17px] h-[17px] border-[1px] border-[#021526] rounded-full">
-                <div className={`w-[7px] h-[7px] bg-[#021526] rounded-full absolute top-[5px] left-[5px] transition-opacity ${formData.is_rental === 0 ? 'opacity-100' : 'opacity-0'}`}></div>
-              </div>
-            </div>
-            <span className="ml-2 text-base">იყიდება</span>
-          </label>
+          <div className="mb-20">
+            <h3 className="text-[18px] leading-[19.54px] font-medium mb-2 font-helveticaNeue">გარიგების ტიპი</h3>
+            <div className="flex space-x-6">
+              <label className="flex items-center cursor-pointer">
+                <div className="relative">
+                  <input
+                    type="radio"
+                    name="is_rental"
+                    value={0}
+                    checked={formData.is_rental === 0}
+                    onChange={() => setFormData(prev => ({ ...prev, is_rental: 0 }))}
+                    className="sr-only"
+                  />
+                  <div className="w-[17px] h-[17px] border-[1px] border-[#021526] rounded-full">
+                    <div className={`w-[7px] h-[7px] bg-[#021526] rounded-full absolute top-[5px] left-[5px] transition-opacity ${formData.is_rental === 0 ? 'opacity-100' : 'opacity-0'}`}></div>
+                  </div>
+                </div>
+                <span className="ml-2 text-base">იყიდება</span>
+              </label>
 
-          <label className="flex items-center cursor-pointer">
-            <div className="relative">
-              <input
-                type="radio"
-                name="is_rental"
-                value={1}
-                checked={formData.is_rental === 1}
-                onChange={() => setFormData(prev => ({ ...prev, is_rental: 1 }))}
-                className="sr-only"
-              />
-              <div className="w-[17px] h-[17px] border-[1px] border-[#021526] rounded-full">
-                <div className={`w-[7px] h-[7px] bg-[#021526] rounded-full absolute top-[5px] left-[5px] transition-opacity ${formData.is_rental === 1 ? 'opacity-100' : 'opacity-0'}`}></div>
-              </div>
+              <label className="flex items-center cursor-pointer">
+                <div className="relative">
+                  <input
+                    type="radio"
+                    name="is_rental"
+                    value={1}
+                    checked={formData.is_rental === 1}
+                    onChange={() => setFormData(prev => ({ ...prev, is_rental: 1 }))}
+                    className="sr-only"
+                  />
+                  <div className="w-[17px] h-[17px] border-[1px] border-[#021526] rounded-full">
+                    <div className={`w-[7px] h-[7px] bg-[#021526] rounded-full absolute top-[5px] left-[5px] transition-opacity ${formData.is_rental === 1 ? 'opacity-100' : 'opacity-0'}`}></div>
+                  </div>
+                </div>
+                <span className="ml-2 text-base">ქირავდება</span>
+              </label>
             </div>
-            <span className="ml-2 text-base">ქირავდება</span>
-          </label>
-        </div>
-      </div>
+            {errors.is_rental && (
+              <div className={getMessageClassName('is_rental')}>
+                <svg className="w-5 h-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                {errors.is_rental}
+              </div>
+            )}
+          </div>
 
           <div className="mb-20">
             <label className="font-medium font-helveticaNeue text-lg mb-[22px] block">მდებარეობა</label>

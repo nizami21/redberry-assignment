@@ -16,7 +16,7 @@ const RealEstateCard = ({ price,city, location, bedrooms, area, zipcode, imageUr
         </div>
       </div>
       <div className="p-4">
-        <div className="font-bold text-2xl mb-2">{price} ₾</div>
+        <div className="font-bold text-2xl mb-2">{price.toLocaleString()} ₾</div>
         <p className="text-gray-600 text-sm flex items-center mb-3 gap-1">
           <img src={locationLogo} className='w-5 h-5' />
           {city.name}, {location}

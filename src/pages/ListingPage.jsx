@@ -45,6 +45,7 @@ const ListingPage = () => {
     const navigate = useNavigate();
     const [listing, setListing] = useState(null);
     const { id, listings } = location.state || {};
+    const [showFullDescription, setShowFullDescription] = useState(false);
     const settings = {
         dots: false,
         infinite: listings.length > 4,
@@ -58,6 +59,11 @@ const ListingPage = () => {
         arrows: true,
     };
     
+
+    const truncateDescription = (text, maxLength) => {
+        if (text.length <= maxLength) return text;
+        return text.substr(0, maxLength) + '...';
+    };
 
     useEffect(() => {
         if (!id) {
@@ -144,8 +150,21 @@ const ListingPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <p className="font-normal font-figaRO text-[16px] mt-[40px] leading-[26px] text-[#808A93] mb-6">{listing.description}</p>
-                        
+                        <div className="mt-6 mb-4 h-40 overflow-y-scroll">
+                            <p className="font-normal font-figaRO text-[16px] leading-[26px] text-[#808A93]">
+                                {showFullDescription 
+                                    ? listing.description 
+                                    : truncateDescription(listing.description, 180)}
+                            </p>
+                            {listing.description.length > 180 && (
+                                <button 
+                                    onClick={() => setShowFullDescription(!showFullDescription)}
+                                    className="text-blue-500 hover:text-blue-700 mt-2"
+                                >
+                                    {showFullDescription ? 'ნაკლების ნახვა' : 'მეტის ნახვა...'}
+                                </button>
+                            )}
+                        </div>
                         <div className="mt-6 mb-[42px]">
                             <div className="border-[1px] border-[#DBDBDB] py-4 px-5 rounded-lg w-full mb-4">
                                 <div className="flex items-center">
@@ -178,7 +197,7 @@ const ListingPage = () => {
                 </div>
             </main>
             {listings.length > 1 && (
-            <div className='max-w-[1591px] mx-[162px] mt-[84px]'>
+            <div className='max-w-[1591px] mx-[162px] mt-[84px] mb-[150px]'>
                 <h2 className="text-2xl font-bold mb-4">ბინები მსგავს ლოკაციაზე</h2>
                 <div className="relative">
                     <Slider {...settings}>
